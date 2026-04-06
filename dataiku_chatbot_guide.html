@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build a Chatbot in Dataiku — Complete Beginner Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0d14;
+  --surface: #111420;
+  --card: #161b2e;
+  --card2: #1a2038;
+  --accent: #6c8ef7;
+  --accent2: #f7a34f;
+  --accent3: #4fd9f7;
+  --green: #4ff7a3;
+  --red: #f74f6c;
+  --yellow: #f7d84f;
+  --text: #e4e8f5;
+  --muted: #6b738f;
+  --border: #242a42;
+  --code-bg: #0d1020;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* ═══════════════ HERO ═══════════════ */
+.hero {
+  background: linear-gradient(160deg, #0b1020 0%, #0e1530 60%, #0b1220 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 60px 32px 52px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(108,142,247,0.12) 0%, transparent 65%);
+  pointer-events: none;
+}
+.badge {
+  display: inline-block;
+  background: rgba(108,142,247,0.12);
+  border: 1px solid rgba(108,142,247,0.35);
+  color: var(--accent);
+  font-family: 'Syne', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(26px, 4.5vw, 46px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #e4e8f5 30%, #6c8ef7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  color: var(--muted);
+  font-size: 15px;
+  max-width: 600px;
+  margin: 0 auto 28px;
+  font-weight: 300;
+}
+.toc-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.toc-pill {
+  display: inline-block;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.toc-pill:hover {
+  background: rgba(108,142,247,0.12);
+  border-color: rgba(108,142,247,0.4);
+  color: var(--accent);
+}
+
+/* ═══════════════ LAYOUT ═══════════════ */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 56px 24px 100px;
+}
+
+/* ═══════════════ PHASE HEADER ═══════════════ */
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 56px 0 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.phase-num {
+  background: var(--accent);
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.phase-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+/* ═══════════════ STEP CARD ═══════════════ */
+.step-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.step-card:hover { border-color: rgba(108,142,247,0.3); }
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.015);
+}
+.step-num-badge {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(108,142,247,0.15);
+  border: 1.5px solid rgba(108,142,247,0.4);
+  color: var(--accent);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.step-header-text h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+.step-header-text .step-where {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.step-body {
+  padding: 20px 22px;
+}
+.step-body p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+.step-body p:last-child { margin-bottom: 0; }
+.step-body strong { color: var(--text); }
+
+/* ═══════════════ SUBSTEP ═══════════════ */
+.substep {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(36,42,66,0.6);
+}
+.substep:last-child { border-bottom: none; }
+.substep-icon {
+  font-size: 16px;
+  min-width: 24px;
+  text-align: center;
+  margin-top: 1px;
+}
+.substep-text {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.substep-text strong { color: var(--text); }
+
+/* ═══════════════ CODE BLOCKS ═══════════════ */
+.code-block {
+  background: var(--code-bg);
+  border: 1px solid rgba(108,142,247,0.2);
+  border-radius: 10px;
+  margin: 16px 0;
+  overflow: hidden;
+}
+.code-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: rgba(108,142,247,0.07);
+  border-bottom: 1px solid rgba(108,142,247,0.15);
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.code-label .lang-tag {
+  background: rgba(108,142,247,0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+pre {
+  padding: 18px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: #c5ccdf;
+}
+.kw { color: #6c8ef7; }       /* keywords */
+.str { color: #4ff7a3; }      /* strings */
+.cm { color: #455270; font-style: italic; } /* comments */
+.fn { color: #f7d84f; }       /* function names */
+.var { color: #f7a34f; }      /* variables */
+.num { color: #4fd9f7; }      /* numbers */
+
+/* ═══════════════ CALLOUTS ═══════════════ */
+.callout {
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 13.5px;
+}
+.callout-info {
+  background: rgba(108,142,247,0.07);
+  border: 1px solid rgba(108,142,247,0.22);
+  border-left: 3px solid var(--accent);
+  color: var(--text);
+}
+.callout-tip {
+  background: rgba(79,247,163,0.06);
+  border: 1px solid rgba(79,247,163,0.2);
+  border-left: 3px solid var(--green);
+  color: var(--muted);
+}
+.callout-warn {
+  background: rgba(247,216,79,0.06);
+  border: 1px solid rgba(247,216,79,0.2);
+  border-left: 3px solid var(--yellow);
+  color: var(--muted);
+}
+.callout-info strong { color: var(--accent); }
+.callout-tip strong { color: var(--green); }
+.callout-warn strong { color: var(--yellow); }
+
+/* ═══════════════ OVERVIEW DIAGRAM ═══════════════ */
+.pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  align-items: center;
+  margin: 24px 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.pipe-node {
+  background: rgba(108,142,247,0.1);
+  border: 1.5px solid rgba(108,142,247,0.3);
+  border-radius: 8px;
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 12.5px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.pipe-arrow {
+  color: var(--border);
+  font-size: 20px;
+  padding: 0 6px;
+}
+
+/* ═══════════════ FIELD TABLE ═══════════════ */
+.field-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 14px 0;
+}
+.field-table th {
+  background: rgba(255,255,255,0.04);
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.field-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(36,42,66,0.5);
+  color: var(--muted);
+  vertical-align: top;
+}
+.field-table tr:last-child td { border-bottom: none; }
+.field-table .field-name {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent2);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.field-table .field-val {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ═══════════════ SECTION LABEL ═══════════════ */
+.section-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent3);
+  margin: 28px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ═══════════════ RESULT BOX ═══════════════ */
+.result-box {
+  background: #060a12;
+  border: 1px solid rgba(79,247,163,0.2);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--green);
+  margin: 12px 0;
+}
+
+/* ═══════════════ CHECKLIST ═══════════════ */
+.checklist { list-style: none; margin: 12px 0; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 13.5px;
+  border-bottom: 1px solid rgba(36,42,66,0.4);
+  color: var(--muted);
+}
+.checklist li:last-child { border-bottom: none; }
+.chk {
+  width: 19px; height: 19px;
+  border: 1.5px solid var(--border);
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  color: var(--green);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.chk:hover { border-color: var(--green); background: rgba(79,247,163,0.1); }
+
+/* ═══════════════ GLOSSARY ═══════════════ */
+.gloss-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.gloss-item {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 12px 15px;
+}
+.gloss-term {
+  font-family: 'Syne', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.gloss-def { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+.spacer { height: 40px; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero">
+  <div class="badge">Beginner · End-to-End · Dataiku + SQL + LLM</div>
+  <h1>Build a Chatbot in Dataiku<br>Using a SQL Database</h1>
+  <p class="hero-sub">A step-by-step guide written for beginners. Every click, every command, every concept — explained clearly from start to finish.</p>
+  <div class="toc-pills">
+    <a class="toc-pill" href="#phase0">Phase 0: Prerequisites</a>
+    <a class="toc-pill" href="#phase1">Phase 1: Connect SQL DB</a>
+    <a class="toc-pill" href="#phase2">Phase 2: Build Your Flow</a>
+    <a class="toc-pill" href="#phase3">Phase 3: Connect the LLM</a>
+    <a class="toc-pill" href="#phase4">Phase 4: Python Recipe</a>
+    <a class="toc-pill" href="#phase5">Phase 5: Build Chatbot UI</a>
+    <a class="toc-pill" href="#phase6">Phase 6: Test &amp; Deploy</a>
+  </div>
+</div>
+
+<!-- ══════════ CONTAINER ══════════ -->
+<div class="container">
+
+  <!-- ── WHAT YOU'LL BUILD ── -->
+  <div class="section-label">What You'll Build</div>
+  <p style="color:var(--muted); margin-bottom:18px;">You'll build a chatbot that a user can ask questions in plain English — and it will query your SQL database to find and return the answer. Here's the full pipeline:</p>
+  <div class="pipeline">
+    <div class="pipe-node">🗄️ SQL Database</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">📋 Dataiku Dataset</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">🧹 Prepare Recipe</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">🐍 Python Recipe<br><small>(calls LLM)</small></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">💬 Answers Webapp<br><small>(your chatbot!)</small></div>
+  </div>
+  <div class="callout callout-info">
+    <strong>Technologies used:</strong> Dataiku DSS (v13.4+), a SQL database (PostgreSQL / MySQL / SQL Server / Snowflake — pick yours), and an LLM API (OpenAI GPT-4o recommended for beginners). Your admin must set up the LLM connection first — tell them before you start.
+  </div>
+
+  <!-- ══════════ PHASE 0 ══════════ -->
+  <div id="phase0" class="phase-header">
+    <span class="phase-num">PHASE 0</span>
+    <h2>Prerequisites — Before You Start</h2>
+  </div>
+  <p style="color:var(--muted); margin-bottom:20px;">These are things you need to have ready (or ask your admin to set up) before touching Dataiku. Think of these as gathering your ingredients before cooking.</p>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">A</div>
+      <div class="step-header-text">
+        <h3>Get Your SQL Database Credentials</h3>
+        <div class="step-where">📋 Ask your database admin / IT team</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>You need permission and login details to connect Dataiku to your SQL database. Write these down — you'll need them in Phase 1.</p>
+      <table class="field-table">
+        <tr><th>What You Need</th><th>Example</th><th>Where to Get It</th></tr>
+        <tr><td class="field-name">Host / Server address</td><td class="field-val">db.mycompany.com</td><td class="field-val">Your IT/DB admin</td></tr>
+        <tr><td class="field-name">Port number</td><td class="field-val">5432 (PostgreSQL)<br>3306 (MySQL)<br>1433 (SQL Server)</td><td class="field-val">Your IT/DB admin</td></tr>
+        <tr><td class="field-name">Database name</td><td class="field-val">sales_db</td><td class="field-val">Your IT/DB admin</td></tr>
+        <tr><td class="field-name">Username</td><td class="field-val">john_doe</td><td class="field-val">Your IT/DB admin</td></tr>
+        <tr><td class="field-name">Password</td><td class="field-val">••••••••</td><td class="field-val">Your IT/DB admin</td></tr>
+        <tr><td class="field-name">Table name(s)</td><td class="field-val">customers, orders</td><td class="field-val">Ask what tables exist</td></tr>
+      </table>
+      <div class="callout callout-warn"><strong>Important:</strong> You need at least READ access to the tables you want your chatbot to know about.</div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">B</div>
+      <div class="step-header-text">
+        <h3>Ask Your Admin to Set Up the LLM Connection</h3>
+        <div class="step-where">⚙️ Admin Panel → Connections → LLM Mesh</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Dataiku uses something called <strong>LLM Mesh</strong> — it's the bridge between Dataiku and AI models like ChatGPT. Only an <strong>admin</strong> can set this up. You don't do this yourself — just ask your admin to do it and give you access.</p>
+      <div class="section-label">What your admin needs to do</div>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">Go to <strong>Administration → Connections → New Connection → LLM Mesh section</strong></span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">Select <strong>OpenAI</strong> (easiest for beginners). Enter the <strong>OpenAI API Key</strong> (get one at platform.openai.com). Enable <strong>GPT-4o</strong> model.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">Click <strong>Test</strong> to confirm the connection works. Click <strong>Save</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">4️⃣</span>
+        <span class="substep-text">Share the <strong>connection name</strong> with you (e.g. <code style="color:var(--accent2); font-family:monospace">openai-gpt4</code>). You'll need this name later.</span>
+      </div>
+      <div class="callout callout-tip"><strong>Tip:</strong> If your company uses Azure OpenAI or Anthropic Claude, those work too. The steps in this guide are the same — just the connection name differs.</div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">C</div>
+      <div class="step-header-text">
+        <h3>Install the "Answers" Plugin</h3>
+        <div class="step-where">⚙️ Admin Panel → Plugins → Add Plugin → Plugin Store</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p><strong>Answers</strong> is a plugin that gives you a ready-made chatbot interface in Dataiku. You don't have to build a chat UI from scratch — Answers does it for you. Your admin installs it once, and everyone can use it.</p>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">Admin goes to <strong>Main Menu (grid icon) → Plugins → Add Plugin → Search Plugin Store</strong></span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">Search for <strong>"Answers"</strong>. Install the latest version (needs v2.0.0 or higher).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">Click <strong>Install</strong> and wait for it to complete. Now the plugin is available to all users.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PHASE 1 ══════════ -->
+  <div id="phase1" class="phase-header">
+    <span class="phase-num">PHASE 1</span>
+    <h2>Connect Your SQL Database to Dataiku</h2>
+  </div>
+  <p style="color:var(--muted); margin-bottom:20px;">First, create your project, then tell Dataiku where your database lives and import your data tables as datasets.</p>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">1</div>
+      <div class="step-header-text">
+        <h3>Create a New Project</h3>
+        <div class="step-where">🏠 Dataiku Home Page</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <span class="substep-icon">🖱️</span>
+        <span class="substep-text">On the Dataiku home page, click the <strong>+ New Project</strong> button (top left area).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">📝</span>
+        <span class="substep-text">Click <strong>Blank Project</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">✏️</span>
+        <span class="substep-text">In <strong>Project Name</strong>, type something like: <code style="color:var(--accent2); font-family:monospace">SQL Chatbot</code></span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">🔑</span>
+        <span class="substep-text">The <strong>Project Key</strong> is auto-filled. It becomes permanent once saved. Example: <code style="color:var(--accent2); font-family:monospace">SQL_CHATBOT</code>. This key appears in the URL — don't change it after creation.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">✅</span>
+        <span class="substep-text">Click <strong>Create</strong>. You'll land on your project's home page.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">2</div>
+      <div class="step-header-text">
+        <h3>Add a SQL Database Connection</h3>
+        <div class="step-where">⚙️ Admin Panel → Connections (or ask your admin)</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>A <strong>connection</strong> is how Dataiku remembers your database address, username, and password — so you only enter it once. After this, every project can use it.</p>
+      <div class="callout callout-warn"><strong>Note:</strong> If your admin already created a SQL connection for your database, skip to Step 3 and just use that connection name.</div>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">Click the <strong>grid/waffle icon</strong> (top right) → <strong>Administration</strong> (admins only) → <strong>Connections</strong> tab → <strong>+ New Connection</strong></span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">Under <strong>SQL</strong> section, select your database type. Choose one of: <strong>PostgreSQL</strong>, <strong>MySQL</strong>, <strong>Microsoft SQL Server</strong>, or <strong>Snowflake</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">Fill in the connection form using your credentials from Phase 0:</span>
+      </div>
+      <table class="field-table">
+        <tr><th>Field in Dataiku</th><th>What to Enter</th></tr>
+        <tr><td class="field-name">Connection Name</td><td class="field-val">A short nickname, e.g. <code style="font-family:monospace">my_postgres_db</code></td></tr>
+        <tr><td class="field-name">Host</td><td class="field-val">Your database server address</td></tr>
+        <tr><td class="field-name">Port</td><td class="field-val">5432 for PostgreSQL / 3306 MySQL / 1433 SQL Server</td></tr>
+        <tr><td class="field-name">Database</td><td class="field-val">The database name (e.g. sales_db)</td></tr>
+        <tr><td class="field-name">User</td><td class="field-val">Your database username</td></tr>
+        <tr><td class="field-name">Password</td><td class="field-val">Your database password</td></tr>
+      </table>
+      <div class="substep">
+        <span class="substep-icon">4️⃣</span>
+        <span class="substep-text">Click <strong>Test</strong> at the bottom. If you see a green ✅ "Connection successful" message — great! If not, double-check your host and port. Then click <strong>Create</strong>.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">3</div>
+      <div class="step-header-text">
+        <h3>Import Your SQL Table as a Dataset</h3>
+        <div class="step-where">📁 Your Project → + Dataset → SQL Databases</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Now bring your actual table data into Dataiku. A <strong>dataset</strong> in Dataiku is a table — it can come from a SQL database, a file, or anywhere. Once imported, it looks the same regardless of source.</p>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">Inside your project, click <strong>+ Dataset</strong> (in the top menu or the Flow). Under <strong>SQL Databases</strong>, click your connection name (e.g. <code style="color:var(--accent2); font-family:monospace">my_postgres_db</code>).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">Dataiku shows you all available tables in that database. Click the table you want (e.g. <code style="color:var(--accent2); font-family:monospace">customers</code>).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">A preview of the data appears. Check it looks correct (column names, sample data). Click <strong>Create Dataset</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">4️⃣</span>
+        <span class="substep-text">Repeat for every table your chatbot needs to know about (e.g. <code style="color:var(--accent2); font-family:monospace">orders</code>, <code style="color:var(--accent2); font-family:monospace">products</code>).</span>
+      </div>
+      <div class="callout callout-tip"><strong>What just happened?</strong> Dataiku created a <em>pointer</em> to your SQL table. It doesn't copy all your data — it reads it live from the database. The blue square icon in the Flow represents this dataset.</div>
+    </div>
+  </div>
+
+  <!-- ══════════ PHASE 2 ══════════ -->
+  <div id="phase2" class="phase-header">
+    <span class="phase-num">PHASE 2</span>
+    <h2>Build Your Data Flow — Clean &amp; Prepare</h2>
+  </div>
+  <p style="color:var(--muted); margin-bottom:20px;">Before the AI can answer questions about your data, you need to clean it and add helpful descriptions. Think of it like labelling boxes before storing them — the AI understands labelled data much better.</p>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">4</div>
+      <div class="step-header-text">
+        <h3>Go to the Flow and Verify Your Datasets</h3>
+        <div class="step-where">📋 Project → Flow (or press G + F)</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <span class="substep-icon">⌨️</span>
+        <span class="substep-text">Press <strong>G + F</strong> on your keyboard to jump to the Flow at any time. This is your project's visual workspace — you'll spend most of your time here.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">👁️</span>
+        <span class="substep-text">You should see your table(s) as blue squares (datasets). Click any dataset to open it and preview the data — check the columns look right.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">📊</span>
+        <span class="substep-text">Click the <strong>Columns</strong> tab inside a dataset. Dataiku shows you every column name and what data type it detected (string, integer, date, etc.). Also click <strong>Analyze</strong> on any column to see stats — % of empty values, distinct values, etc.</span>
+      </div>
+      <div class="callout callout-info"><strong>Why check this?</strong> If a column has lots of empty values or incorrect data types, the AI will give poor answers. You want clean, well-structured data going in.</div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">5</div>
+      <div class="step-header-text">
+        <h3>Add Column Descriptions (Metadata)</h3>
+        <div class="step-where">📋 Dataset → Schema tab → Edit column descriptions</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>This is one of the most important steps for a good chatbot. When you add descriptions to your columns, the AI understands what each column <em>means</em> — not just its name. For example, a column named <code style="color:var(--accent2); font-family:monospace">cust_id</code> becomes clear when you add "Unique customer identifier". Without descriptions, the AI often makes wrong guesses.</p>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">Open your dataset → click the <strong>Schema</strong> tab (or <strong>Columns</strong> tab depending on your DSS version).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">For each column, click into the <strong>Comment/Description</strong> field (usually to the right of the column name) and type a plain-English description.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">Click <strong>Save Schema</strong> when done.</span>
+      </div>
+      <table class="field-table">
+        <tr><th>Column Name</th><th>Example Description to Add</th></tr>
+        <tr><td class="field-name">cust_id</td><td class="field-val">Unique numeric ID for each customer</td></tr>
+        <tr><td class="field-name">cust_name</td><td class="field-val">Full name of the customer</td></tr>
+        <tr><td class="field-name">order_date</td><td class="field-val">Date the order was placed (YYYY-MM-DD format)</td></tr>
+        <tr><td class="field-name">order_total</td><td class="field-val">Total value of the order in USD</td></tr>
+        <tr><td class="field-name">status</td><td class="field-val">Order status: pending, shipped, or delivered</td></tr>
+      </table>
+      <div class="callout callout-tip"><strong>AI shortcut (DSS 13+):</strong> In the Schema tab, look for a <strong>"Generate Metadata with AI"</strong> button. Click it and Dataiku will auto-generate descriptions using the LLM — then you just review and correct them. This saves a lot of time!</div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">6</div>
+      <div class="step-header-text">
+        <h3>Create a Prepare Recipe to Clean Your Data</h3>
+        <div class="step-where">📋 Flow → Click Dataset → + Recipe → Prepare</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Even if your data looks clean, there are small issues the AI will struggle with: empty cells, wrong date formats, columns with many nulls. The <strong>Prepare recipe</strong> (yellow broom icon) is where you fix all of this visually — no coding needed.</p>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">In the Flow, click on your dataset (blue square). A side panel opens. Click <strong>+ Recipe</strong>, then select <strong>Prepare</strong> (yellow broom icon).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">Dataiku asks for an output dataset name. Type something like <code style="color:var(--accent2); font-family:monospace">customers_prepared</code>. Click <strong>Create Recipe</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">The Prepare recipe editor opens. You'll see your data on the right. Common cleaning steps to add (click <strong>+ Add New Step</strong>):</span>
+      </div>
+      <div style="margin-left:36px; margin-top:10px;">
+        <div class="substep">
+          <span class="substep-icon">🗑️</span>
+          <span class="substep-text"><strong>Remove rows with empty values:</strong> Step → Filter → <em>Remove rows where [column] is empty</em>. Use this for critical columns like customer ID or order date that must have values.</span>
+        </div>
+        <div class="substep">
+          <span class="substep-icon">✂️</span>
+          <span class="substep-text"><strong>Trim whitespace:</strong> Step → String → <em>Trim whitespace from [column]</em>. Removes invisible spaces at the start/end of text that cause matching problems.</span>
+        </div>
+        <div class="substep">
+          <span class="substep-icon">🔠</span>
+          <span class="substep-text"><strong>Normalize text case:</strong> Step → String → <em>Lowercase [column]</em>. Makes text comparisons reliable (e.g. "Pending" and "pending" become the same).</span>
+        </div>
+        <div class="substep">
+          <span class="substep-icon">📅</span>
+          <span class="substep-text"><strong>Fix date columns:</strong> Click a date column → <em>Parse date</em>. Tell Dataiku the format (e.g. <code style="font-family:monospace">YYYY-MM-DD</code>). This lets the AI answer "orders in the last 30 days" type questions.</span>
+        </div>
+      </div>
+      <div class="substep" style="margin-top:10px;">
+        <span class="substep-icon">4️⃣</span>
+        <span class="substep-text">Once done adding steps, click <strong>Run</strong> (top right). Wait for the green checkmark. Your clean dataset is now ready.</span>
+      </div>
+      <div class="callout callout-tip"><strong>Remember:</strong> Don't run after each individual step. Add all your steps first, then run once at the end. It's much faster, and you can see the preview of what each step will do on the right side panel before running.</div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">7</div>
+      <div class="step-header-text">
+        <h3>Join Multiple Tables (if you have more than one)</h3>
+        <div class="step-where">📋 Flow → Select 2 datasets → + Recipe → Join</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>If your chatbot needs to answer questions about data that lives in different tables (e.g. "Which customers have pending orders?"), you need to join those tables. A <strong>Join recipe</strong> combines two tables into one using a shared column (like customer ID).</p>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">In the Flow, click on your primary dataset (e.g. <code style="color:var(--accent2); font-family:monospace">customers_prepared</code>). In the side panel, click <strong>+ Recipe → Join</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">Click <strong>Add a dataset</strong> and select the second table (e.g. <code style="color:var(--accent2); font-family:monospace">orders</code>). Name the output something like <code style="color:var(--accent2); font-family:monospace">customers_with_orders</code>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">Set the <strong>Join condition</strong>: pick the shared column from each table. For example: <code style="color:var(--accent2); font-family:monospace">customers.cust_id = orders.customer_id</code>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">4️⃣</span>
+        <span class="substep-text">Choose <strong>Left Join</strong> (keeps all customers even if they have no orders). Click <strong>Save</strong> then <strong>Run</strong>.</span>
+      </div>
+      <div class="callout callout-info"><strong>Left Join vs Inner Join:</strong> Left Join = keep all rows from the left table, add matching data from right (nulls if no match). Inner Join = only keep rows where both tables have matching data. Use Left Join when you don't want to lose rows.</div>
+    </div>
+  </div>
+
+  <!-- ══════════ PHASE 3 ══════════ -->
+  <div id="phase3" class="phase-header">
+    <span class="phase-num">PHASE 3</span>
+    <h2>Connect the AI — Set Up the LLM</h2>
+  </div>
+  <p style="color:var(--muted); margin-bottom:20px;">Now you connect the "brain" (the AI model). Dataiku manages this through the LLM Mesh — you don't call OpenAI directly, you go through Dataiku. This keeps things secure and governed.</p>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">8</div>
+      <div class="step-header-text">
+        <h3>Find Your LLM ID</h3>
+        <div class="step-where">📋 Your Project → Notebooks → New Python Notebook</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Your admin set up an LLM connection. Now you need to find the exact <strong>LLM ID</strong> — a text string that identifies which model to use. You'll need this in your Python code.</p>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">In your project, click the <strong>Notebooks</strong> tab in the top menu → <strong>+ New Notebook → Python</strong>. Give it any name.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">In the notebook cell, type and run this code:</span>
+      </div>
+      <div class="code-block">
+        <div class="code-label">Finding your LLM ID <span class="lang-tag">PYTHON</span></div>
+        <pre><span class="cm"># This code asks Dataiku to list all available AI models (LLMs)</span>
+<span class="cm"># that your admin has set up. Run this to find the right LLM ID.</span>
+
+<span class="kw">import</span> dataiku
+
+<span class="cm"># Connect to your Dataiku project (automatically uses the current project)</span>
+client = dataiku.<span class="fn">api_client</span>()
+project = client.<span class="fn">get_default_project</span>()
+
+<span class="cm"># List all available LLMs</span>
+llms = project.<span class="fn">list_llms</span>()
+
+<span class="cm"># Print each LLM's ID and name</span>
+<span class="kw">for</span> llm <span class="kw">in</span> llms:
+    <span class="fn">print</span>(<span class="str">f"ID: {llm['id']}  |  Name: {llm.get('name', 'N/A')}"</span>)</pre>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">Press <strong>Shift + Enter</strong> (or click the ▶ Run button). You'll see output like:</span>
+      </div>
+      <div class="result-box">ID: openai:my-openai-conn:gpt-4o  |  Name: GPT-4o<br>ID: openai:my-openai-conn:gpt-3.5-turbo  |  Name: GPT-3.5 Turbo</div>
+      <div class="substep">
+        <span class="substep-icon">4️⃣</span>
+        <span class="substep-text"><strong>Copy the ID</strong> of the model you want (e.g. <code style="color:var(--accent2); font-family:monospace">openai:my-openai-conn:gpt-4o</code>). You'll paste it into your recipe code in Phase 4.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PHASE 4 ══════════ -->
+  <div id="phase4" class="phase-header">
+    <span class="phase-num">PHASE 4</span>
+    <h2>Build the Brain — Python Recipe to Query with AI</h2>
+  </div>
+  <p style="color:var(--muted); margin-bottom:20px;">This is where the magic happens. You'll write a Python recipe that: (1) reads your cleaned SQL data, (2) sends it to the AI, and (3) stores the AI's responses as a new dataset. The chatbot will use this to answer questions.</p>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">9</div>
+      <div class="step-header-text">
+        <h3>Create a Python (Code) Recipe</h3>
+        <div class="step-where">📋 Flow → Click your prepared dataset → + Recipe → Python</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">In the Flow, click your final cleaned dataset (e.g. <code style="color:var(--accent2); font-family:monospace">customers_with_orders</code>).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">In the side panel, click <strong>+ Recipe</strong> → under <strong>Code Recipes</strong>, click <strong>Python</strong> (orange circle icon).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">For the output dataset, type: <code style="color:var(--accent2); font-family:monospace">chatbot_knowledge_base</code>. Click <strong>Create Recipe</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">4️⃣</span>
+        <span class="substep-text">The Python code editor opens. Delete all the existing code and paste the full code below.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">10</div>
+      <div class="step-header-text">
+        <h3>Write the Python Code — Full Explained Version</h3>
+        <div class="step-where">📋 Python Recipe Editor</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Copy and paste the code below into your recipe. Read the comments (the lines starting with <code style="color:var(--muted)">#</code>) — every line is explained.</p>
+      <div class="code-block">
+        <div class="code-label">chatbot_knowledge_base Python Recipe — Full Code <span class="lang-tag">PYTHON</span></div>
+        <pre><span class="cm"># ═══════════════════════════════════════════════════════════
+# CHATBOT KNOWLEDGE BASE BUILDER
+# This script:
+#   1. Reads your cleaned SQL data from Dataiku
+#   2. Converts each row into a human-readable text summary
+#   3. Stores those summaries so the chatbot can use them
+# ═══════════════════════════════════════════════════════════</span>
+
+<span class="cm"># --- IMPORTS ---
+# These are libraries (toolkits) we need.
+# 'dataiku' lets us talk to Dataiku from Python.
+# 'pandas' is the standard Python library for working with tables (DataFrames).</span>
+<span class="kw">import</span> dataiku
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># --- STEP 1: READ YOUR INPUT DATASET ---
+# 'dataiku.Dataset()' connects to a dataset inside your Dataiku project.
+# Replace "customers_with_orders" with your actual dataset name if different.
+# .get_dataframe() loads it into a pandas DataFrame — a table in Python memory.</span>
+input_dataset = dataiku.<span class="fn">Dataset</span>(<span class="str">"customers_with_orders"</span>)
+df = input_dataset.<span class="fn">get_dataframe</span>()
+
+<span class="cm"># --- STEP 2: PREVIEW YOUR DATA ---
+# This prints the first 3 rows so you can confirm the data loaded correctly.
+# Remove this line after testing.</span>
+<span class="fn">print</span>(<span class="str">"Data loaded. Shape:"</span>, df.shape)
+<span class="fn">print</span>(df.<span class="fn">head</span>(<span class="num">3</span>))
+
+<span class="cm"># --- STEP 3: CONVERT EACH ROW TO A TEXT SUMMARY ---
+# The chatbot works with TEXT, not raw table data.
+# We need to turn each row (record) into a sentence that describes it.
+# This function takes one row and turns it into a text description.
+#
+# IMPORTANT: Customize this function based on YOUR column names!
+# Replace 'cust_name', 'order_date', 'order_total', 'status'
+# with the actual column names in your dataset.
+# Check your dataset's Columns tab in Dataiku to find your column names.</span>
+
+<span class="kw">def</span> <span class="fn">row_to_text</span>(row):
+    <span class="str">"""
+    Converts a single row of data into a readable text summary.
+    The chatbot uses these texts to answer user questions.
+    
+    Customize this based on your data!
+    """</span>
+    <span class="cm"># Build the summary sentence by sentence.
+    # f"..." is an f-string — it lets you insert variable values into text.
+    # row['column_name'] gets the value from a specific column for that row.</span>
+    summary = (
+        <span class="str">f"Customer: {row['cust_name']}. "</span>
+        <span class="str">f"Customer ID: {row['cust_id']}. "</span>
+        <span class="str">f"Order placed on: {row['order_date']}. "</span>
+        <span class="str">f"Order total: ${row['order_total']}. "</span>
+        <span class="str">f"Order status: {row['status']}."</span>
+    )
+    <span class="kw">return</span> summary
+
+<span class="cm"># Apply the function to every row in the DataFrame.
+# .apply() runs the function on each row and creates a new column called 'text_summary'.</span>
+df[<span class="str">'text_summary'</span>] = df.<span class="fn">apply</span>(row_to_text, axis=<span class="num">1</span>)
+
+<span class="cm"># --- STEP 4: KEEP ONLY WHAT'S NEEDED ---
+# For the knowledge base, we only need the text summary and a unique ID.
+# Add any other columns that help identify the record (e.g., cust_id, order_id).</span>
+output_df = df[[<span class="str">'cust_id'</span>, <span class="str">'text_summary'</span>]].<span class="fn">copy</span>()
+
+<span class="cm"># --- STEP 5: WRITE OUTPUT TO DATAIKU ---
+# This saves our new dataset (with text summaries) back into the Dataiku Flow.
+# 'chatbot_knowledge_base' must match the output dataset name you created
+# when setting up this recipe in Step 9.</span>
+output_dataset = dataiku.<span class="fn">Dataset</span>(<span class="str">"chatbot_knowledge_base"</span>)
+output_dataset.<span class="fn">write_with_schema</span>(output_df)
+
+<span class="fn">print</span>(<span class="str">"✅ Done! Knowledge base created with"</span>, <span class="fn">len</span>(output_df), <span class="str">"records."</span>)</pre>
+      </div>
+      <div class="callout callout-warn"><strong>Before running:</strong> Replace the column names (<code style="font-family:monospace">cust_name</code>, <code style="font-family:monospace">order_date</code>, etc.) with the actual column names from your dataset. Open your dataset → Columns tab to see the exact names. They must match exactly, including upper/lowercase.</div>
+      <div class="substep" style="margin-top:14px;">
+        <span class="substep-icon">5️⃣</span>
+        <span class="substep-text">Click <strong>Run</strong> (top right of the recipe editor). Watch the logs at the bottom. You should see "✅ Done! Knowledge base created with X records." If there's an error, the most common cause is a column name mismatch.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">11</div>
+      <div class="step-header-text">
+        <h3>Test the LLM Connection with a Quick Query</h3>
+        <div class="step-where">📋 Notebooks → Your Python Notebook from Step 8</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Before building the full chatbot, make sure the AI can receive and answer questions from Dataiku. Run this test in your notebook.</p>
+      <div class="code-block">
+        <div class="code-label">LLM Connection Test <span class="lang-tag">PYTHON</span></div>
+        <pre><span class="cm"># ═══════════════════════════════════════════════════════════
+# LLM QUICK TEST
+# This sends a test question to the AI and prints the answer.
+# Run this in a Notebook (not a Recipe) to quickly test your setup.
+# ═══════════════════════════════════════════════════════════</span>
+
+<span class="kw">import</span> dataiku
+
+<span class="cm"># --- Connect to your project ---</span>
+client = dataiku.<span class="fn">api_client</span>()
+project = client.<span class="fn">get_default_project</span>()
+
+<span class="cm"># --- REPLACE THIS with your actual LLM ID from Step 8 ---
+# It looks like: "openai:connection-name:model-name"</span>
+LLM_ID = <span class="str">"openai:my-openai-conn:gpt-4o"</span>  <span class="cm"># ← CHANGE THIS</span>
+
+<span class="cm"># --- Get the LLM object from Dataiku ---
+# This is like "picking up the phone" to talk to the AI model.</span>
+llm = project.<span class="fn">get_llm</span>(LLM_ID)
+
+<span class="cm"># --- Create a new completion (a request for the AI to respond) ---</span>
+completion = llm.<span class="fn">new_completion</span>()
+
+<span class="cm"># --- Add a message to send ---
+# The "system" role gives the AI instructions about how to behave.
+# The "user" role is the actual question being asked.</span>
+completion.<span class="fn">with_message</span>(
+    <span class="str">"You are a helpful assistant for a sales database. Answer questions clearly."</span>,
+    role=<span class="str">"system"</span>
+)
+completion.<span class="fn">with_message</span>(
+    <span class="str">"Hello! Can you confirm you are connected and ready to answer data questions?"</span>,
+    role=<span class="str">"user"</span>
+)
+
+<span class="cm"># --- Send the request and get the response ---</span>
+response = completion.<span class="fn">execute</span>()
+
+<span class="cm"># --- Print the AI's answer ---
+# response.text contains the AI's reply as a string.</span>
+<span class="fn">print</span>(<span class="str">"AI Response:"</span>)
+<span class="fn">print</span>(response.text)</pre>
+      </div>
+      <p>If you get a response like "Hello! Yes, I'm connected and ready to answer data questions..." — your LLM is working correctly. If you get an error, check your LLM_ID is correct (exact copy from Step 8).</p>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">12</div>
+      <div class="step-header-text">
+        <h3>Create the AI Query Function — Making the Chatbot Intelligent</h3>
+        <div class="step-where">📋 Flow → New Python Recipe (input: knowledge_base, output: query_results)</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>This optional but powerful step creates a recipe that can take a question, search your knowledge base for relevant records, send them to the AI, and return an answer. This is called <strong>RAG — Retrieval Augmented Generation</strong>. Think of it as giving the AI a cheat sheet of your data before asking it a question.</p>
+      <div class="substep">
+        <span class="substep-icon">📌</span>
+        <span class="substep-text"><strong>What is RAG?</strong> Instead of just asking the AI a question (which it might not know the answer to), you first find the most relevant rows from your database, then include those rows as "context" in the question. The AI then answers based on the real data — not guesswork.</span>
+      </div>
+      <div class="code-block">
+        <div class="code-label">RAG Query Function — Full Explained Code <span class="lang-tag">PYTHON</span></div>
+        <pre><span class="cm"># ═══════════════════════════════════════════════════════════
+# RAG QUERY RECIPE
+# This recipe:
+#   1. Takes sample questions
+#   2. Finds relevant rows from the knowledge base
+#   3. Sends those rows + the question to the AI
+#   4. Returns the AI's answer
+# ═══════════════════════════════════════════════════════════</span>
+
+<span class="kw">import</span> dataiku
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># --- CONFIGURATION ---
+# Replace with your actual LLM ID (from Step 8)</span>
+LLM_ID = <span class="str">"openai:my-openai-conn:gpt-4o"</span>  <span class="cm"># ← CHANGE THIS</span>
+
+<span class="cm"># --- READ THE KNOWLEDGE BASE ---
+# This is the dataset with all the text summaries we created earlier.</span>
+kb_dataset = dataiku.<span class="fn">Dataset</span>(<span class="str">"chatbot_knowledge_base"</span>)
+kb_df = kb_dataset.<span class="fn">get_dataframe</span>()
+
+<span class="cm"># --- SET UP THE LLM ---</span>
+client = dataiku.<span class="fn">api_client</span>()
+project = client.<span class="fn">get_default_project</span>()
+llm = project.<span class="fn">get_llm</span>(LLM_ID)
+
+
+<span class="cm"># ─────────────────────────────────────────────────
+# FUNCTION: search_knowledge_base
+# Purpose: Find relevant rows from the knowledge base
+# How it works: Simple keyword search — looks for the
+#   question's words in the text summaries.
+# ─────────────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">search_knowledge_base</span>(question, kb_df, max_results=<span class="num">5</span>):
+    <span class="str">"""
+    Searches the knowledge base for rows relevant to the question.
+    Returns the top matching rows as a list of text strings.
+    
+    Parameters:
+        question: The user's question (a string)
+        kb_df: The knowledge base DataFrame
+        max_results: How many matching rows to return (default 5)
+    """</span>
+    <span class="cm"># Convert question to lowercase for case-insensitive matching</span>
+    question_lower = question.<span class="fn">lower</span>()
+    
+    <span class="cm"># Split question into individual words to search for</span>
+    keywords = question_lower.<span class="fn">split</span>()
+    
+    <span class="cm"># Score each row by how many keywords it contains</span>
+    <span class="kw">def</span> <span class="fn">score_row</span>(text):
+        text_lower = <span class="fn">str</span>(text).<span class="fn">lower</span>()
+        <span class="kw">return</span> <span class="fn">sum</span>(<span class="num">1</span> <span class="kw">for</span> kw <span class="kw">in</span> keywords <span class="kw">if</span> kw <span class="kw">in</span> text_lower)
+    
+    kb_df = kb_df.<span class="fn">copy</span>()
+    kb_df[<span class="str">'_score'</span>] = kb_df[<span class="str">'text_summary'</span>].<span class="fn">apply</span>(score_row)
+    
+    <span class="cm"># Sort by score (highest first) and take top results</span>
+    top_rows = kb_df.<span class="fn">sort_values</span>(<span class="str">'_score'</span>, ascending=<span class="kw">False</span>).<span class="fn">head</span>(max_results)
+    
+    <span class="cm"># Return as a list of text summaries</span>
+    <span class="kw">return</span> top_rows[<span class="str">'text_summary'</span>].<span class="fn">tolist</span>()
+
+
+<span class="cm"># ─────────────────────────────────────────────────
+# FUNCTION: ask_ai
+# Purpose: Send the question + relevant data to the AI
+# ─────────────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">ask_ai</span>(question, context_rows):
+    <span class="str">"""
+    Sends the question and relevant data rows to the AI and returns the answer.
+    
+    Parameters:
+        question: The user's question
+        context_rows: List of relevant text summaries from the knowledge base
+    """</span>
+    <span class="cm"># Join all the context rows into one block of text</span>
+    context_text = <span class="str">"\n"</span>.<span class="fn">join</span>(context_rows)
+    
+    <span class="cm"># Build the full prompt.
+    # The system message tells the AI its role.
+    # The user message includes the real data + the question.</span>
+    system_message = <span class="str">"""You are a helpful data analyst assistant. 
+You are given data records from a database.
+Answer questions based ONLY on the provided data.
+If the answer is not in the data, say 'I don't have that information in the database.'
+Keep answers clear and concise."""</span>
+    
+    user_message = <span class="str">f"""Here are the relevant records from the database:
+
+{context_text}
+
+Based on this data, please answer the following question:
+{question}"""</span>
+    
+    <span class="cm"># Create and send the request to the AI</span>
+    completion = llm.<span class="fn">new_completion</span>()
+    completion.<span class="fn">with_message</span>(system_message, role=<span class="str">"system"</span>)
+    completion.<span class="fn">with_message</span>(user_message, role=<span class="str">"user"</span>)
+    
+    <span class="cm"># Execute and return the response text</span>
+    response = completion.<span class="fn">execute</span>()
+    <span class="kw">return</span> response.text
+
+
+<span class="cm"># ─────────────────────────────────────────────────
+# MAIN: Run sample questions
+# Customize these questions based on your data!
+# ─────────────────────────────────────────────────</span>
+sample_questions = [
+    <span class="str">"Who are the top 3 customers by order total?"</span>,
+    <span class="str">"How many orders are currently pending?"</span>,
+    <span class="str">"What is the average order value?"</span>,
+]
+
+results = []
+
+<span class="kw">for</span> question <span class="kw">in</span> sample_questions:
+    <span class="fn">print</span>(<span class="str">f"\n📨 Question: {question}"</span>)
+    
+    <span class="cm"># Step 1: Find relevant rows</span>
+    relevant_rows = <span class="fn">search_knowledge_base</span>(question, kb_df)
+    <span class="fn">print</span>(<span class="str">f"   Found {len(relevant_rows)} relevant records"</span>)
+    
+    <span class="cm"># Step 2: Ask the AI</span>
+    answer = <span class="fn">ask_ai</span>(question, relevant_rows)
+    <span class="fn">print</span>(<span class="str">f"🤖 Answer: {answer}"</span>)
+    
+    <span class="cm"># Step 3: Store the result</span>
+    results.<span class="fn">append</span>({
+        <span class="str">'question'</span>: question,
+        <span class="str">'answer'</span>: answer,
+        <span class="str">'num_records_used'</span>: <span class="fn">len</span>(relevant_rows)
+    })
+
+<span class="cm"># --- SAVE THE RESULTS ---
+# This saves the Q&A pairs to a new dataset in Dataiku.
+# Useful for reviewing what the chatbot answered.</span>
+results_df = pd.<span class="fn">DataFrame</span>(results)
+output_dataset = dataiku.<span class="fn">Dataset</span>(<span class="str">"query_results"</span>)
+output_dataset.<span class="fn">write_with_schema</span>(results_df)
+
+<span class="fn">print</span>(<span class="str">"\n✅ Done! Results saved to query_results dataset."</span>)</pre>
+      </div>
+      <div class="callout callout-tip"><strong>After running:</strong> Open the <code style="font-family:monospace">query_results</code> dataset in the Flow to review what the AI answered. This helps you tune the questions and system message before building the full chatbot UI.</div>
+    </div>
+  </div>
+
+  <!-- ══════════ PHASE 5 ══════════ -->
+  <div id="phase5" class="phase-header">
+    <span class="phase-num">PHASE 5</span>
+    <h2>Build the Chatbot UI — Dataiku Answers Webapp</h2>
+  </div>
+  <p style="color:var(--muted); margin-bottom:20px;">Now you'll use the <strong>Answers plugin</strong> to create a real chat interface. This is the window your users will open to type questions and get answers — just like ChatGPT but connected to your database.</p>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">13</div>
+      <div class="step-header-text">
+        <h3>Create the Answers Webapp</h3>
+        <div class="step-where">📋 Project → Code menu (top) → Webapp → + New Webapp → Answers</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">In your project, look at the <strong>top navigation bar</strong>. Click the <strong>Code</strong> icon (looks like <code style="font-family:monospace">&lt;/&gt;</code>) → then click <strong>Webapp</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">Click <strong>+ New Webapp → Visual Webapp</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">In the popup, select <strong>Answers</strong> (this option appears because the admin installed the plugin in Phase 0).</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">4️⃣</span>
+        <span class="substep-text">Give your webapp a name like <code style="color:var(--accent2); font-family:monospace">Sales Database Chatbot</code>. Click <strong>Create</strong>.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">14</div>
+      <div class="step-header-text">
+        <h3>Configure the Answers Webapp — LLM &amp; Datasets</h3>
+        <div class="step-where">📋 Answers Webapp → Settings panel</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>The settings panel opens automatically. Here's what each setting means and what to fill in:</p>
+
+      <div class="section-label">LLM Settings</div>
+      <table class="field-table">
+        <tr><th>Field</th><th>What to Enter</th><th>Why It Matters</th></tr>
+        <tr><td class="field-name">Main LLM</td><td class="field-val">Select your LLM from dropdown (e.g. <em>GPT-4o</em>)</td><td>This is the AI brain your chatbot uses</td></tr>
+        <tr><td class="field-name">Conversation History Dataset</td><td class="field-val">Click <strong>New Dataset</strong> → name it <code style="font-family:monospace">chat_history</code> → store it in your SQL connection</td><td>Logs all conversations so the AI remembers context within a session</td></tr>
+        <tr><td class="field-name">User Profile Dataset</td><td class="field-val">Click <strong>New Dataset</strong> → name it <code style="font-family:monospace">user_profiles</code> → store in SQL</td><td>Optionally stores user preferences</td></tr>
+      </table>
+
+      <div class="section-label">Dataset Retrieval (Most Important Setting!)</div>
+      <p style="font-size:13.5px; color:var(--muted);">This section tells the chatbot <em>how</em> to find answers from your data. You want to use <strong>Dataset Retrieval</strong> for SQL data (as opposed to document-based search).</p>
+      <table class="field-table">
+        <tr><th>Field</th><th>What to Enter</th><th>Why</th></tr>
+        <tr><td class="field-name">Retrieval Method</td><td class="field-val">Select: <em>"Use dataset retrieval (for specific answers from a table)"</em></td><td>Tells the chatbot to query your data table, not documents</td></tr>
+        <tr><td class="field-name">Dataset to query</td><td class="field-val">Select <code style="font-family:monospace">chatbot_knowledge_base</code></td><td>This is the cleaned data with text summaries you built</td></tr>
+        <tr><td class="field-name">Text column</td><td class="field-val">Select <code style="font-family:monospace">text_summary</code></td><td>This is the column the AI reads to find answers</td></tr>
+      </table>
+
+      <div class="section-label">System Prompt (Instructions to the AI)</div>
+      <p style="font-size:13.5px; color:var(--muted);">This is the instruction you give the AI about how to behave. Copy and customise this:</p>
+      <div class="code-block">
+        <div class="code-label">System Prompt — Paste into the "Instructions to LLM" field <span class="lang-tag">PROMPT</span></div>
+        <pre><span class="str">You are a helpful data assistant for our sales database.
+Your job is to answer questions about our customers, orders, and products.
+
+Rules:
+- Only answer based on the data provided to you.
+- If you do not have enough data to answer, say so clearly.
+- Keep answers short and to the point.
+- If asked for numbers or statistics, be precise.
+- Do not make up information.
+
+You are talking to business users who are not technical — 
+avoid jargon and explain things in plain English.</span></pre>
+      </div>
+
+      <div class="section-label">Feedback &amp; Other Settings</div>
+      <table class="field-table">
+        <tr><th>Field</th><th>What to Select</th></tr>
+        <tr><td class="field-name">Allow user feedback</td><td class="field-val">✅ Check this box — lets users thumbs up/down answers</td></tr>
+        <tr><td class="field-name">General Feedback Dataset</td><td class="field-val">New Dataset → name it <code style="font-family:monospace">chat_feedback</code> → store in SQL</td></tr>
+        <tr><td class="field-name">Run backend as</td><td class="field-val">Select <em>Administrator</em> (so any user can access it)</td></tr>
+        <tr><td class="field-name">Number of processes</td><td class="field-val">Set to 2 (allows multiple users at the same time)</td></tr>
+      </table>
+
+      <div class="substep" style="margin-top:14px;">
+        <span class="substep-icon">💾</span>
+        <span class="substep-text">Click <strong>Save and View Webapp</strong>. Your chatbot UI opens!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PHASE 6 ══════════ -->
+  <div id="phase6" class="phase-header">
+    <span class="phase-num">PHASE 6</span>
+    <h2>Test, Troubleshoot &amp; Deploy</h2>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">15</div>
+      <div class="step-header-text">
+        <h3>Test Your Chatbot</h3>
+        <div class="step-where">💬 Chatbot Webapp → Type your questions</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>You should now see a chat interface. Type test questions and check the answers. Here's a good testing checklist:</p>
+      <ul class="checklist">
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>Ask a simple factual question: <em>"How many customers are in the database?"</em></span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>Ask about a specific record: <em>"Tell me about customer John Smith's orders."</em></span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>Ask an aggregation: <em>"What is the total value of all pending orders?"</em></span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>Ask something not in the data: The chatbot should say "I don't have that information."</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>Test a follow-up question in the same chat session.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">16</div>
+      <div class="step-header-text">
+        <h3>Troubleshooting — Common Problems &amp; Fixes</h3>
+        <div class="step-where">💡 When things don't work as expected</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <table class="field-table">
+        <tr><th>Problem</th><th>Likely Cause</th><th>Fix</th></tr>
+        <tr>
+          <td class="field-val" style="color:var(--red)">KeyError: 'cust_name'</td>
+          <td>Column name in code doesn't match actual column</td>
+          <td>Open dataset → Columns tab → check exact spelling and copy-paste into code</td>
+        </tr>
+        <tr>
+          <td class="field-val" style="color:var(--red)">LLM ID not found</td>
+          <td>Wrong LLM ID string</td>
+          <td>Re-run the list_llms() code in Step 8 and copy the exact ID</td>
+        </tr>
+        <tr>
+          <td class="field-val" style="color:var(--red)">Connection refused / timeout</td>
+          <td>Database credentials wrong or database unreachable</td>
+          <td>Check host, port, username, password. Ask your DB admin to verify access</td>
+        </tr>
+        <tr>
+          <td class="field-val" style="color:var(--red)">AI gives wrong or made-up answers</td>
+          <td>Knowledge base rows don't contain the right info</td>
+          <td>Check your <code style="font-family:monospace">row_to_text()</code> function — add more column values to the text summary</td>
+        </tr>
+        <tr>
+          <td class="field-val" style="color:var(--red)">Webapp shows blank / error page</td>
+          <td>Backend not running / wrong dataset selected</td>
+          <td>Go back to webapp settings, confirm all datasets exist, click Save again</td>
+        </tr>
+        <tr>
+          <td class="field-val" style="color:var(--red)">No LLMs appear in dropdown</td>
+          <td>Admin hasn't set up LLM connection</td>
+          <td>Ask your admin to complete Phase 0 Step B</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">17</div>
+      <div class="step-header-text">
+        <h3>Share Your Chatbot With Others</h3>
+        <div class="step-where">💬 Webapp → Share → Copy Link or Give Access</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Your chatbot is currently visible only to you. Here's how to share it:</p>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text"><strong>Share the link:</strong> In the Webapp view, copy the URL from your browser. Anyone with a Dataiku account who has access to your project can open it.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text"><strong>Give project access:</strong> In your project → <strong>Security</strong> → Add their Dataiku username → give them <strong>Read Project Content</strong> access. They only need to view, not edit.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text"><strong>For non-Dataiku users:</strong> This requires your admin to publish the webapp publicly or use an API. Ask your admin about external access options.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-header">
+      <div class="step-num-badge">18</div>
+      <div class="step-header-text">
+        <h3>Keep Data Fresh — Set Up Automatic Refresh</h3>
+        <div class="step-where">📋 Flow → Scenarios → New Scenario</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Right now, your chatbot only knows about the data that existed when you ran the recipes. If new orders or customers are added to your SQL database, the chatbot won't know until you re-run the recipes. Scenarios automate this.</p>
+      <div class="substep">
+        <span class="substep-icon">1️⃣</span>
+        <span class="substep-text">In your project top menu, click <strong>Scenarios</strong> → <strong>+ New Scenario</strong>.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">2️⃣</span>
+        <span class="substep-text">Click <strong>Add Step → Build / Train → Build Dataset</strong>. Select <code style="color:var(--accent2); font-family:monospace">chatbot_knowledge_base</code>. Check "Recursive" — this rebuilds everything in the pipeline automatically.</span>
+      </div>
+      <div class="substep">
+        <span class="substep-icon">3️⃣</span>
+        <span class="substep-text">Click <strong>Add Trigger → Time-based</strong>. Set it to run every day at 6 AM (or whatever makes sense for your use case). Save the scenario.</span>
+      </div>
+      <div class="callout callout-tip"><strong>Result:</strong> Every morning at 6 AM, Dataiku automatically re-reads your SQL database, re-runs the Prepare recipe and Python recipe, and updates the knowledge base. Your chatbot always has fresh data without you doing anything manually.</div>
+    </div>
+  </div>
+
+  <!-- FINAL CHECKLIST -->
+  <hr class="divider">
+  <div class="section-label">Complete Checklist — All Steps</div>
+  <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px 26px; margin-bottom:32px;">
+    <ul class="checklist">
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Phase 0:</strong> Got SQL credentials, admin set up LLM Mesh, Answers plugin installed</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 1:</strong> Created new Dataiku project with a unique Project Key</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 2:</strong> Added SQL database connection and tested it successfully</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 3:</strong> Imported SQL tables as Dataiku datasets</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 4:</strong> Opened the Flow, verified datasets look correct</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 5:</strong> Added column descriptions / metadata to datasets</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 6:</strong> Created Prepare recipe to clean data</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 7:</strong> Joined tables (if needed) to create one combined dataset</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 8:</strong> Found the LLM ID using list_llms() in a notebook</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 9-10:</strong> Created Python recipe, built chatbot_knowledge_base dataset</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 11:</strong> Tested LLM connection with a simple prompt — got a response</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 12:</strong> Created RAG query recipe and tested sample questions</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 13-14:</strong> Created Answers Webapp, configured LLM + dataset retrieval + system prompt</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 15:</strong> Tested chatbot with real questions — answers are correct</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 17:</strong> Shared chatbot link with team</span></li>
+      <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span><strong>Step 18:</strong> Set up daily Scenario to auto-refresh data</span></li>
+    </ul>
+  </div>
+
+  <!-- GLOSSARY -->
+  <div class="section-label">Quick Glossary</div>
+  <div class="gloss-grid">
+    <div class="gloss-item"><div class="gloss-term">LLM</div><div class="gloss-def">Large Language Model — the AI brain (e.g. GPT-4o, Claude). It reads text and generates answers.</div></div>
+    <div class="gloss-item"><div class="gloss-term">LLM Mesh</div><div class="gloss-def">Dataiku's central hub for managing AI connections. Admin sets it up once, everyone uses it.</div></div>
+    <div class="gloss-item"><div class="gloss-term">RAG</div><div class="gloss-def">Retrieval Augmented Generation — find relevant data first, then send it to the AI with the question.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Dataset</div><div class="gloss-def">A table in Dataiku — can come from SQL, files, APIs etc. Always looks the same once imported.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Recipe</div><div class="gloss-def">A transformation step in the Flow. Yellow = visual, Orange = code (Python), Red = plugin.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Flow</div><div class="gloss-def">The visual pipeline canvas. Shows all datasets and recipes connected together. Press G+F to open.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Knowledge Base</div><div class="gloss-def">The prepared dataset that the chatbot searches through to find relevant information.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Answers Plugin</div><div class="gloss-def">A Dataiku plugin that gives you a ready-made chat UI — no front-end coding needed.</div></div>
+    <div class="gloss-item"><div class="gloss-term">System Prompt</div><div class="gloss-def">Instructions you give the AI about how to behave — its "personality" and rules.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Scenario</div><div class="gloss-def">An automated workflow in Dataiku that runs recipes on a schedule (like a cron job).</div></div>
+    <div class="gloss-item"><div class="gloss-term">DataFrame</div><div class="gloss-def">A table loaded into Python memory using the pandas library. Like an Excel sheet in code.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Project Key</div><div class="gloss-def">Permanent unique ID for your project — shown in the URL. Never changes after creation.</div></div>
+  </div>
+
+  <div style="text-align:center; color:var(--muted); font-size:12px; padding-top:40px; margin-top:40px; border-top:1px solid var(--border);">
+    Built for beginners · Dataiku DSS 13.4+ · LLM Mesh + Answers Plugin + SQL Database 🚀
+  </div>
+
+</div>
+</body>
+</html>
