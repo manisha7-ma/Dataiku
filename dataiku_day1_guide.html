@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dataiku Day 1 – Your Chatbot Starter Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f17;
+    --surface: #151924;
+    --card: #1c2235;
+    --accent: #4f8ef7;
+    --accent2: #f7a34f;
+    --accent3: #4ff7a3;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --border: #2a3045;
+    --yellow: #f7d84f;
+    --orange: #f7834f;
+    --red: #f74f4f;
+    --green: #4ff7a3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.65;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0d1526 0%, #111a30 50%, #0d1520 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 32px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(79,142,247,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(79,142,247,0.15);
+    border: 1px solid rgba(79,142,247,0.4);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, #e8eaf0 0%, #4f8ef7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 560px;
+    margin: 0 auto;
+    font-weight: 300;
+  }
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .hero-meta span {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hero-meta .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent3);
+    display: inline-block;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* SECTION HEADERS */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .block-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: rgba(79,142,247,0.35); }
+
+  /* CONCEPT GRID */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .concept-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .concept-card:hover { transform: translateY(-2px); border-color: rgba(79,142,247,0.4); }
+  .concept-icon {
+    font-size: 26px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .concept-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .concept-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* RECIPE LEGEND */
+  .recipe-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .recipe-row:last-child { border-bottom: none; }
+  .recipe-badge {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .recipe-badge.yellow { background: rgba(247,216,79,0.18); border: 2px solid var(--yellow); }
+  .recipe-badge.orange { background: rgba(247,131,79,0.18); border: 2px solid var(--orange); }
+  .recipe-badge.red    { background: rgba(247,79,79,0.18);  border: 2px solid var(--red); }
+  .recipe-info h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .recipe-info p { font-size: 13px; color: var(--muted); }
+
+  /* STEP FLOW */
+  .step-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .step {
+    display: flex;
+    gap: 18px;
+    position: relative;
+  }
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .step-num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .step-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    margin: 4px 0;
+    min-height: 24px;
+  }
+  .step:last-child .step-line { display: none; }
+  .step-body {
+    padding-bottom: 28px;
+    flex: 1;
+  }
+  .step-body h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    padding-top: 6px;
+    color: var(--text);
+  }
+  .step-body p { font-size: 13.5px; color: var(--muted); }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: rgba(79,142,247,0.08);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 13.5px;
+    color: var(--text);
+  }
+  .highlight strong { color: var(--accent); }
+
+  .tip {
+    background: rgba(79,247,163,0.06);
+    border: 1px solid rgba(79,247,163,0.2);
+    border-left: 3px solid var(--accent3);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .tip strong { color: var(--accent3); }
+
+  /* CHECKLIST */
+  .checklist {
+    list-style: none;
+    margin: 14px 0;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(42,48,69,0.6);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li .chk {
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--accent3);
+    background: rgba(79,247,163,0.07);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+  }
+  .checklist li .chk:hover { border-color: var(--accent3); background: rgba(79,247,163,0.15); }
+  .checklist li span { color: var(--text); }
+
+  /* TAG CHIPS */
+  .tag {
+    display: inline-block;
+    background: rgba(79,142,247,0.1);
+    border: 1px solid rgba(79,142,247,0.25);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin: 2px 2px 2px 0;
+  }
+  .tag.green { background: rgba(79,247,163,0.1); border-color: rgba(79,247,163,0.25); color: var(--accent3); }
+  .tag.orange { background: rgba(247,131,79,0.1); border-color: rgba(247,131,79,0.25); color: var(--orange); }
+
+  /* CHATBOT ROADMAP */
+  .roadmap-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .roadmap-item:last-child { border-bottom: none; }
+  .roadmap-icon {
+    font-size: 22px;
+    min-width: 36px;
+    text-align: center;
+    margin-top: 2px;
+  }
+  .roadmap-item h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .roadmap-item p { font-size: 13px; color: var(--muted); }
+
+  /* SHORTCUT TABLE */
+  .shortcut-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0;
+  }
+  .shortcut-grid .key {
+    font-family: monospace;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 13px;
+    color: var(--yellow);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 6px 10px 6px 0;
+    white-space: nowrap;
+  }
+  .shortcut-grid .desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+  }
+
+  /* GLOSSARY */
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .glossary-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .glossary-item .term {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .glossary-item .def { font-size: 12.5px; color: var(--muted); }
+
+  /* ACCORDION */
+  details { margin-bottom: 10px; }
+  details > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+  details > summary:hover { border-color: rgba(79,142,247,0.4); }
+  details[open] > summary { border-radius: 10px 10px 0 0; border-bottom-color: transparent; color: var(--accent); }
+  details > summary::after { content: '﹢'; font-size: 18px; color: var(--muted); }
+  details[open] > summary::after { content: '﹣'; }
+  .details-body {
+    background: rgba(28,34,53,0.5);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 16px 18px;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  section { margin-bottom: 52px; }
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Q2 2025 · Day 1 · Dataiku Hands-On Training</div>
+  <h1>Your Dataiku Starter Guide<br>for Building a Chatbot</h1>
+  <p>A beginner-friendly summary of Day 1 — everything you need to know to start your own project.</p>
+  <div class="hero-meta">
+    <span><span class="dot"></span> Fraud Detection Use Case (as reference)</span>
+    <span><span class="dot"></span> Trainer: Vikrant Gupta</span>
+    <span><span class="dot"></span> 3-Day Series</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- WHAT IS DATAIKU -->
+  <section>
+    <div class="section-title">What Is Dataiku (DSS)?</div>
+    <p style="color:var(--muted); margin-bottom:20px; font-size:15px;">
+      Dataiku DSS (Data Science Studio) is an <strong style="color:var(--text)">end-to-end data & AI platform</strong> — think of it as a workbench where you can bring your data, clean it, build models (including chatbots!), visualise results, and deploy — all in one place. You don't need to know every database or cloud tool; Dataiku creates a bridge for you.
+    </p>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <span class="concept-icon">🧹</span>
+        <h3>Data Cleaning</h3>
+        <p>Handle messy, incomplete or wrong values in your data before feeding it to any AI model.</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">📊</span>
+        <h3>Visualisation</h3>
+        <p>Build charts and dashboards to explore your data and share insights with your team.</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">🤖</span>
+        <h3>ML & AI Models</h3>
+        <p>Train machine learning models — or use LLMs / APIs — to make predictions or power chatbots.</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">🚀</span>
+        <h3>Deployment</h3>
+        <p>Bundle your finished project and move it to production with minimal effort — just bundle and click.</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">🔍</span>
+        <h3>Monitoring</h3>
+        <p>Watch how your deployed model performs over time and make adjustments as needed.</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">👥</span>
+        <h3>Collaboration</h3>
+        <p>Multiple team members — analysts, data scientists, engineers — can work on the same project without clashing.</p>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Remember:</strong> Dataiku = DSS. The trainer used both names interchangeably throughout. They mean exactly the same tool.
+    </div>
+  </section>
+
+  <!-- KEY CONCEPTS -->
+  <section>
+    <div class="section-title">Core Concepts You Must Know</div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="block-title">🗂️ Projects</div>
+      <p style="font-size:14px; color:var(--muted);">Everything in Dataiku lives inside a <strong style="color:var(--text)">Project</strong>. When you create one, you give it a name (editable later) and a <strong style="color:var(--text)">Project Key</strong> (permanent — never changes, used in the URL). For your chatbot, you'll create a new blank project.</p>
+      <div class="tip" style="margin-top:12px;"><strong>Tip:</strong> Name your project clearly from the start, e.g. <code style="color:var(--accent)">CHATBOT_YourName</code>. The key can't be changed!</div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="block-title">📋 Datasets (the blue squares)</div>
+      <p style="font-size:14px; color:var(--muted);">A dataset is where your data lives. No matter whether it comes from Excel, PostgreSQL, S3, or an API — it always looks the same inside Dataiku. The icon changes to show the source, but the interface is identical. For a chatbot, your dataset might be a list of FAQs, documents, or conversation logs.</p>
+    </div>
+
+    <div class="card">
+      <div class="block-title">⚙️ Recipes (the circles) — Transformations</div>
+      <p style="font-size:14px; color:var(--muted); margin-bottom:14px;">Recipes are the operations you perform on datasets to produce new datasets. Think: input data → recipe → output data.</p>
+      <div class="recipe-row">
+        <div class="recipe-badge yellow">🟡</div>
+        <div class="recipe-info">
+          <h4>Yellow = Visual Recipes</h4>
+          <p>Click-and-configure, no coding needed. Includes: Join, Stack, Filter, Sort, Prepare, Group… These are the most common. Great for beginners!</p>
+        </div>
+      </div>
+      <div class="recipe-row">
+        <div class="recipe-badge orange">🟠</div>
+        <div class="recipe-info">
+          <h4>Orange = Code Recipes</h4>
+          <p>Write your own Python, R, or Scala code. Perfect for calling APIs (like an LLM/chatbot API) or doing custom logic.</p>
+        </div>
+      </div>
+      <div class="recipe-row">
+        <div class="recipe-badge red">🔴</div>
+        <div class="recipe-info">
+          <h4>Red = Plugins</h4>
+          <p>Downloadable extensions for specific needs (e.g. Power BI connector, Geo plugin). Install only what you need from the Plugin Store.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE FLOW -->
+  <section>
+    <div class="section-title">Understanding the Flow</div>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">The <strong style="color:var(--text)">Flow</strong> is the visual canvas of your project. Press <code style="color:var(--yellow)">G + F</code> from anywhere to jump to it. It shows how your datasets and recipes connect — like a pipeline map.</p>
+    <div class="card">
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; font-size:14px; color:var(--muted);">
+        <span>📥 Source Data</span>
+        <span style="color:var(--border)">──▶</span>
+        <span>🟡 Recipe</span>
+        <span style="color:var(--border)">──▶</span>
+        <span>📋 Intermediate Dataset</span>
+        <span style="color:var(--border)">──▶</span>
+        <span>🟡 Recipe</span>
+        <span style="color:var(--border)">──▶</span>
+        <span>✅ Final Output</span>
+      </div>
+    </div>
+    <div class="tip"><strong>Navigation shortcut:</strong> Press <strong>G + F</strong> to go to Flow from anywhere in the app.</div>
+  </section>
+
+  <!-- WHAT HAPPENED IN DAY 1 -->
+  <section>
+    <div class="section-title">Day 1 Hands-On — What Was Done (Step by Step)</div>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:24px;">The class used a <strong style="color:var(--text)">credit card fraud detection</strong> project as the training use case. Here's the exact sequence of steps. Understanding this order is key — it applies to any project, including your chatbot.</p>
+
+    <div class="step-flow">
+      <div class="step">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Create a New Project</h4>
+          <p>Click <em>+ New Project → Blank Project</em>. Set a name and a unique Project Key. The key is permanent — choose carefully.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Import Datasets</h4>
+          <p>Go to <em>Dataset → Upload your files</em> to import CSV/Excel files. You can import multiple files at once and create separate datasets from them. The class imported 4 files: Transaction 2021, Transaction 2022, Card Holder Info, and Merchant Info.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Explore Your Data</h4>
+          <p>Open any dataset to see its columns, data types, and Dataiku's smart suggestions. Use <em>Analyse</em> on a column to get stats (distinct values, % errors, min/max). Use <em>Metrics</em> to compute row count without loading everything.</p>
+          <div class="tip" style="margin-top:10px;"><strong>Sampling:</strong> Dataiku shows you a sample (first 10,000 rows by default). Use <em>random sampling</em> for a better data picture. Compute whole-data stats separately when needed.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Stack Datasets (combine rows)</h4>
+          <p>Select a dataset → click the <em>Stack</em> recipe. This appends one table on top of another (rows, not columns). Used to combine Transaction 2021 and 2022 into one table.</p>
+          <p style="margin-top:6px; font-style:italic; font-size:13px;">Stack ≠ Join. Stack adds rows vertically. Join adds columns horizontally.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">5</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Join Datasets (combine columns)</h4>
+          <p>Select a dataset → click the <em>Join</em> recipe → add another dataset. Set the join condition (which column links both tables). The class did a <em>Left Join</em> to keep all transaction records even if card/merchant info was missing.</p>
+          <p style="margin-top:6px; font-size:13px; color:var(--muted);">You can join more than 2 datasets in one recipe — just keep adding tables on the left side.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">6</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Prepare Recipe — Data Cleaning & Enrichment</h4>
+          <p>The <em>Prepare recipe</em> (broom icon, yellow) is your Swiss Army knife. You add steps inside it — each step transforms the data. Steps in Day 1:</p>
+          <ul style="margin-top:10px; padding-left:18px; font-size:13.5px; color:var(--muted); line-height:2;">
+            <li><strong style="color:var(--text)">Remove invalid rows</strong> — deleted error records in the "Signature Provided" column</li>
+            <li><strong style="color:var(--text)">Find & Replace</strong> — created a new "Flag Description" column mapping 0→Fraud, 1→Authorised</li>
+            <li><strong style="color:var(--text)">Create Geopoint</strong> — combined latitude + longitude into a single map point for card holder and merchant locations</li>
+            <li><strong style="color:var(--text)">Reverse Geocode</strong> — turned geopoints into state names (using a plugin)</li>
+            <li><strong style="color:var(--text)">Switch (case logic)</strong> — created "Spending Type" column categorising merchant sectors</li>
+            <li><strong style="color:var(--text)">If-Then-Else</strong> — created a "Risk" column (High / Medium / Low) based on purchase amount + signature</li>
+          </ul>
+          <div class="tip" style="margin-top:12px;"><strong>Pro tip:</strong> Don't run after every step. Add ALL your steps first, then run once at the end. This is much faster and lets you catch mistakes early.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-left"><div class="step-num">7</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <h4>Run & Verify</h4>
+          <p>Click <em>Run</em> to execute the full recipe. Check the output dataset — verify row count and confirm all new columns were created as expected.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHATBOT ROADMAP -->
+  <section>
+    <div class="section-title">🤖 Your Chatbot Project Roadmap in Dataiku</div>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:20px;">Here's how to map what you learned today to building your chatbot in Dataiku:</p>
+    <div class="card">
+      <div class="roadmap-item">
+        <div class="roadmap-icon">📁</div>
+        <div>
+          <h4>Step 1 — Create Your Project</h4>
+          <p>New project → give it a name like <code style="color:var(--accent)">CHATBOT_YourName</code>. This is your workspace.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-icon">📄</div>
+        <div>
+          <h4>Step 2 — Import Your Knowledge Data</h4>
+          <p>Upload the documents, FAQs, or text files your chatbot should know about. These become datasets. CSV, Excel, or TXT all work.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-icon">🧹</div>
+        <div>
+          <h4>Step 3 — Clean & Prepare Text Data</h4>
+          <p>Use the <strong>Prepare recipe</strong> (yellow) to remove duplicates, fix formatting, trim whitespace, or split long documents into chunks. Clean text = better chatbot answers.</p>
+          <div class="tip" style="margin-top:8px;"><strong>For chatbots:</strong> You may need to split documents into smaller paragraphs. Use the <em>Split</em> processor inside Prepare.</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-icon">🔌</div>
+        <div>
+          <h4>Step 4 — Call an LLM API (Orange / Code Recipe)</h4>
+          <p>Use an <strong>Orange code recipe (Python)</strong> to call an LLM like OpenAI's GPT or Anthropic's Claude. Pass your cleaned text chunks + user questions. Return answers as a new column.</p>
+          <div class="highlight" style="margin-top:8px;">As the trainer explained: anything you can do in Python can be done inside Dataiku. Web scraping, API calls, pandas — all work inside a code recipe. The output gets stored as a dataset.</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-icon">📊</div>
+        <div>
+          <h4>Step 5 — Visualise & Test (Tomorrow's topic)</h4>
+          <p>Use charts to explore your data patterns. Day 2 will cover this — you'll see how to create visualisations in Dataiku.</p>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-icon">🚀</div>
+        <div>
+          <h4>Step 6 — Deploy</h4>
+          <p>Once happy, bundle your project and deploy it. Dataiku handles the infrastructure. Your chatbot pipeline becomes a live service.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USER TYPES & LICENSES -->
+  <section>
+    <div class="section-title">User Types & Licenses</div>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <span class="concept-icon">🔑</span>
+        <h3>Admin License</h3>
+        <p>Full access. Sets up the instance, manages users and connections. Free with designer seats.</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">🧑‍💻</span>
+        <h3>Designer License</h3>
+        <p>The paid seat. Used for development — building flows, recipes, models. This is what you use in training.</p>
+      </div>
+      <div class="concept-card">
+        <span class="concept-icon">👀</span>
+        <h3>AI Consumer (Viewer)</h3>
+        <p>Free. View-only — can see dashboards, flows, and datasets. Business users get this. 1 designer = 10 viewers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPUTATION ENGINES -->
+  <section>
+    <div class="section-title">Computation Engines (Good to Know)</div>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:16px;">Dataiku automatically picks the best engine to run your recipes. You don't need to worry about this as a beginner, but it's good context:</p>
+    <div class="card">
+      <div style="display:grid; gap:12px; font-size:13.5px;">
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <span style="font-size:20px;">🖥️</span>
+          <div><strong style="color:var(--text)">DSS Local</strong> — <span style="color:var(--muted)">Default. Dataiku runs the computation itself. Good for most tasks.</span></div>
+        </div>
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <span style="font-size:20px;">🗄️</span>
+          <div><strong style="color:var(--text)">SQL Engine</strong> — <span style="color:var(--muted)">Pushes the query to your database (e.g. SQL Server) to run it there — often much faster for large data.</span></div>
+        </div>
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <span style="font-size:20px;">⚡</span>
+          <div><strong style="color:var(--text)">Spark</strong> — <span style="color:var(--muted)">Distributed computing for huge datasets. Only available if your company has Spark infrastructure.</span></div>
+        </div>
+      </div>
+      <div class="tip" style="margin-top:14px;"><strong>Rule of thumb:</strong> If your data is in a SQL database, switch the engine to SQL — it'll be significantly faster.</div>
+    </div>
+  </section>
+
+  <!-- FAQs / COMMON QUESTIONS -->
+  <section>
+    <div class="section-title">Common Questions from the Session</div>
+
+    <details>
+      <summary>Can I scrape websites or call APIs to get data?</summary>
+      <div class="details-body">Yes! The trainer confirmed this. Open an <strong>Orange code recipe (Python)</strong>, write your scraping or API-calling code, and store the result in a dataset. It works with pandas DataFrames — just like regular Python. Your chatbot can call an LLM API this exact way.</div>
+    </details>
+
+    <details>
+      <summary>What's the difference between Stack and Join?</summary>
+      <div class="details-body"><strong>Stack</strong> = adds rows vertically (same columns, more data). Think: appending two months of transaction data into one table.<br><br><strong>Join</strong> = adds columns horizontally (linking two tables by a shared key). Think: enriching your transaction table with customer details.</div>
+    </details>
+
+    <details>
+      <summary>What are the 3 types of Joins and when do I use them?</summary>
+      <div class="details-body">
+        <strong>Left Join</strong> — Keep ALL rows from the left table; only bring matching rows from the right. If no match, fill with NULL. ✅ Most common, use this by default.<br><br>
+        <strong>Inner Join</strong> — Only keep rows where there's a match in BOTH tables. Non-matching rows disappear.<br><br>
+        <strong>Full Outer Join</strong> — Keep everything from both tables, filling NULLs where there's no match.
+      </div>
+    </details>
+
+    <details>
+      <summary>What does Sampling mean and why does it matter?</summary>
+      <div class="details-body">Dataiku can't load millions of rows into the UI instantly, so it shows you a <strong>sample</strong> (default: first 10,000 rows). Always switch to <strong>Random sampling</strong> for a more representative view. To compute exact row counts, use the <em>Metrics → Compute</em> button or click the refresh icon in the dataset header.</div>
+    </details>
+
+    <details>
+      <summary>What's the difference between Remove, Clear, and Filter in Prepare?</summary>
+      <div class="details-body">
+        <strong>Remove</strong> — Deletes the entire row. Your record count decreases.<br><br>
+        <strong>Clear</strong> — Empties the cell value (makes it NULL) but keeps the row. Row count stays the same.<br><br>
+        <strong>Filter</strong> — Keeps only rows matching a condition; everything else is removed.
+      </div>
+    </details>
+
+    <details>
+      <summary>How do I share my project with a teammate?</summary>
+      <div class="details-body">Go to your project → <strong>Security</strong> → Add their Dataiku user ID → Choose access level (Read, Write, Admin). Usually teams are organised into groups to simplify this.</div>
+    </details>
+
+    <details>
+      <summary>What's coming in Day 2 & Day 3?</summary>
+      <div class="details-body">
+        <strong>Day 2:</strong> Visualisations (charts from your dataset), Statistics, Introduction to Machine Learning, AutoML.<br><br>
+        <strong>Day 3:</strong> ML model deployment, Split recipe (separating train/predict data), and productionisation.
+      </div>
+    </details>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section>
+    <div class="section-title">✅ Day 1 Progress Checklist</div>
+    <div class="card">
+      <ul class="checklist">
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I understand what Dataiku / DSS is and why it's used</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I know what Projects, Datasets, and Recipes are</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I can tell apart Yellow, Orange, and Red recipes</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I created a new project on the learning instance</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I imported at least one dataset via file upload</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I explored a dataset and used the Analyse feature on a column</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I used the Stack recipe to combine two tables</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I used the Join recipe to link datasets on a key column</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I created a Prepare recipe with at least one step</span></li>
+        <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I understand the chatbot roadmap and my next steps</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- QUICK REFERENCE -->
+  <section>
+    <div class="section-title">Quick Reference</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="block-title" style="font-size:15px; margin-bottom:14px;">⌨️ Keyboard Shortcuts</div>
+      <div class="shortcut-grid">
+        <span class="key">G + F</span><span class="desc">Go to Flow (your project canvas)</span>
+        <span class="key">G + H</span><span class="desc">Go to project Home page</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="block-title" style="font-size:15px; margin-bottom:14px;">📖 Glossary</div>
+      <div class="glossary-grid">
+        <div class="glossary-item"><div class="term">DSS</div><div class="def">Data Science Studio — another name for Dataiku</div></div>
+        <div class="glossary-item"><div class="term">Flow</div><div class="def">The visual pipeline of your project (datasets + recipes)</div></div>
+        <div class="glossary-item"><div class="term">Recipe</div><div class="def">A transformation step (Yellow/Orange/Red)</div></div>
+        <div class="glossary-item"><div class="term">Dataset</div><div class="def">A table of data stored in Dataiku (blue square icon)</div></div>
+        <div class="glossary-item"><div class="term">Project Key</div><div class="def">Permanent unique ID for your project — never changes</div></div>
+        <div class="glossary-item"><div class="term">Sample</div><div class="def">A subset of rows shown in the UI for preview</div></div>
+        <div class="glossary-item"><div class="term">Prepare</div><div class="def">The multi-step data cleaning & enrichment recipe</div></div>
+        <div class="glossary-item"><div class="term">Stack</div><div class="def">Append rows from two tables vertically</div></div>
+        <div class="glossary-item"><div class="term">Join</div><div class="def">Combine columns from two tables on a shared key</div></div>
+        <div class="glossary-item"><div class="term">AutoML</div><div class="def">Automated model training — no coding needed (Day 2)</div></div>
+        <div class="glossary-item"><div class="term">Plugin</div><div class="def">Downloadable extension for specific use cases (Red)</div></div>
+        <div class="glossary-item"><div class="term">Geopoint</div><div class="def">A geographic coordinate (lat+long combined) for mapping</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="text-align:center; color:var(--muted); font-size:12px; padding-top:20px; border-top:1px solid var(--border);">
+    Based on Dataiku Hands-On Training · Q2 2025 · Day 1 · Made for beginners 🚀
+  </div>
+
+</div>
+</body>
+</html>
