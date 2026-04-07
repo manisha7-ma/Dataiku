@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dataiku Day 2 — Full Study Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090f;
+  --surface: #0e1120;
+  --card: #131828;
+  --card2: #182035;
+  --accent: #5b8dee;
+  --a2: #ee8f5b;
+  --a3: #5beea3;
+  --a4: #ee5b7a;
+  --a5: #c45bee;
+  --yellow: #eecc5b;
+  --text: #dde3f5;
+  --muted: #636b88;
+  --border: #1f2640;
+  --code: #0a0d18;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.75;font-size:15px;}
+
+/* ── STICKY NAV ── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(7,9,15,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  display:flex;align-items:center;gap:0;overflow-x:auto;
+}
+.nav-brand{
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  color:var(--accent);white-space:nowrap;padding:14px 20px 14px 0;
+  border-right:1px solid var(--border);margin-right:4px;
+}
+.nav a{
+  font-size:12px;font-weight:500;color:var(--muted);
+  text-decoration:none;padding:14px 14px;white-space:nowrap;
+  transition:color .2s;border-bottom:2px solid transparent;
+}
+.nav a:hover{color:var(--text);border-bottom-color:var(--accent);}
+
+/* ── HERO ── */
+.hero{
+  background:linear-gradient(150deg,#080b16 0%,#0c1228 55%,#08101e 100%);
+  border-bottom:1px solid var(--border);
+  padding:72px 32px 60px;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:700px;height:380px;
+  background:radial-gradient(ellipse,rgba(91,141,238,.13) 0%,transparent 68%);
+  pointer-events:none;
+}
+.hero-day{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(91,141,238,.1);border:1px solid rgba(91,141,238,.3);
+  color:var(--accent);font-family:'Syne',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  padding:5px 16px;border-radius:20px;margin-bottom:22px;
+}
+.hero h1{
+  font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,52px);font-weight:800;
+  line-height:1.1;margin-bottom:18px;
+  background:linear-gradient(135deg,#dde3f5 25%,#5b8dee 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-desc{color:var(--muted);font-size:15px;max-width:600px;margin:0 auto 32px;font-weight:300;}
+.topic-grid{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:680px;margin:0 auto;
+}
+.topic-chip{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--muted);font-size:12px;padding:5px 14px;border-radius:20px;
+}
+
+/* ── CONTAINER ── */
+.wrap{max-width:880px;margin:0 auto;padding:60px 24px 120px;}
+
+/* ── CHAPTER HEADING ── */
+.chapter{
+  display:flex;align-items:flex-start;gap:18px;
+  margin:64px 0 32px;padding-bottom:20px;
+  border-bottom:2px solid var(--border);
+}
+.chapter-num{
+  min-width:52px;height:52px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(91,141,238,.25),rgba(91,141,238,.08));
+  border:1.5px solid rgba(91,141,238,.35);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent);
+  flex-shrink:0;
+}
+.chapter-info{}
+.chapter-tag{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);
+  margin-bottom:4px;
+}
+.chapter h2{
+  font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,26px);
+  font-weight:800;line-height:1.2;color:var(--text);
+}
+
+/* ── SECTION LABEL ── */
+.sec{
+  font-family:'Syne',sans-serif;font-size:10.5px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;color:var(--a3);
+  display:flex;align-items:center;gap:10px;margin:32px 0 16px;
+}
+.sec::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── CARDS ── */
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:24px 28px;margin-bottom:18px;transition:border-color .2s;
+}
+.card:hover{border-color:rgba(91,141,238,.3);}
+.card h3{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  margin-bottom:10px;color:var(--text);
+}
+.card p{font-size:14px;color:var(--muted);margin-bottom:10px;}
+.card p:last-child{margin-bottom:0;}
+.card strong{color:var(--text);}
+
+/* ── DEFINITION PAIRS ── */
+.defpair{
+  display:grid;grid-template-columns:180px 1fr;gap:0;
+  margin-bottom:2px;
+}
+.defpair .dk{
+  background:rgba(91,141,238,.07);border:1px solid var(--border);
+  border-right:none;border-radius:8px 0 0 8px;
+  padding:11px 16px;font-family:'Syne',sans-serif;font-size:12.5px;
+  font-weight:700;color:var(--accent);
+}
+.defpair .dv{
+  background:rgba(255,255,255,.02);border:1px solid var(--border);
+  border-radius:0 8px 8px 0;padding:11px 16px;
+  font-size:13.5px;color:var(--muted);
+}
+.defpair .dv strong{color:var(--text);}
+
+/* ── COMPARISON TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0;}
+.tbl th{
+  background:rgba(255,255,255,.04);font-family:'Syne',sans-serif;
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);padding:11px 14px;text-align:left;border-bottom:1px solid var(--border);
+}
+.tbl td{padding:11px 14px;border-bottom:1px solid rgba(31,38,64,.5);color:var(--muted);vertical-align:top;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl td strong{color:var(--text);}
+.tbl .hl{color:var(--a3);font-weight:600;}
+
+/* ── CALLOUTS ── */
+.note,.tip,.warn,.key-idea{
+  border-radius:10px;padding:14px 18px;margin:16px 0;font-size:13.5px;line-height:1.65;
+}
+.note{background:rgba(91,141,238,.07);border:1px solid rgba(91,141,238,.22);border-left:3px solid var(--accent);color:var(--text);}
+.tip{background:rgba(91,238,163,.05);border:1px solid rgba(91,238,163,.18);border-left:3px solid var(--a3);color:var(--muted);}
+.warn{background:rgba(238,140,91,.06);border:1px solid rgba(238,140,91,.2);border-left:3px solid var(--a2);color:var(--muted);}
+.key-idea{background:rgba(196,91,238,.06);border:1px solid rgba(196,91,238,.22);border-left:3px solid var(--a5);color:var(--text);}
+.note strong{color:var(--accent);}
+.tip strong{color:var(--a3);}
+.warn strong{color:var(--a2);}
+.key-idea strong{color:var(--a5);}
+
+/* ── CONCEPT GRID ── */
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin:16px 0;}
+.concept{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:18px 20px;transition:transform .2s,border-color .2s;
+}
+.concept:hover{transform:translateY(-2px);border-color:rgba(91,141,238,.35);}
+.concept .icon{font-size:24px;margin-bottom:10px;display:block;}
+.concept h4{font-family:'Syne',sans-serif;font-size:13.5px;font-weight:700;margin-bottom:6px;color:var(--text);}
+.concept p{font-size:12.5px;color:var(--muted);line-height:1.55;}
+
+/* ── ANALOGY BOX ── */
+.analogy{
+  background:linear-gradient(135deg,rgba(238,204,91,.05) 0%,rgba(238,140,91,.04) 100%);
+  border:1px solid rgba(238,204,91,.2);border-radius:12px;
+  padding:18px 22px;margin:18px 0;
+}
+.analogy-label{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--yellow);margin-bottom:8px;
+}
+.analogy p{font-size:13.5px;color:var(--text);}
+
+/* ── STEP-BY-STEP ── */
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{display:flex;gap:16px;position:relative;}
+.step-l{display:flex;flex-direction:column;align-items:center;}
+.step-n{
+  width:32px;height:32px;border-radius:50%;background:var(--accent);
+  color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;
+}
+.step-line{width:2px;flex:1;background:var(--border);margin:4px 0;min-height:20px;}
+.step:last-child .step-line{display:none;}
+.step-b{padding-bottom:24px;flex:1;}
+.step-b h4{
+  font-family:'Syne',sans-serif;font-size:14.5px;font-weight:700;
+  padding-top:5px;margin-bottom:6px;color:var(--text);
+}
+.step-b p,.step-b li{font-size:13.5px;color:var(--muted);}
+
+/* ── DIAGRAM ── */
+.diagram{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:22px;margin:18px 0;
+}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;justify-content:center;}
+.flow-node{
+  background:rgba(91,141,238,.1);border:1.5px solid rgba(91,141,238,.3);
+  border-radius:8px;padding:9px 16px;font-size:12.5px;
+  font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);text-align:center;
+}
+.flow-node.green{background:rgba(91,238,163,.08);border-color:rgba(91,238,163,.28);color:var(--a3);}
+.flow-node.orange{background:rgba(238,140,91,.08);border-color:rgba(238,140,91,.25);color:var(--a2);}
+.flow-node.purple{background:rgba(196,91,238,.08);border-color:rgba(196,91,238,.25);color:var(--a5);}
+.flow-arr{color:var(--border);font-size:18px;padding:0 2px;}
+
+/* ── CODE ── */
+.codeblock{background:var(--code);border:1px solid rgba(91,141,238,.18);border-radius:10px;margin:16px 0;overflow:hidden;}
+.codeblock-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;background:rgba(91,141,238,.07);border-bottom:1px solid rgba(91,141,238,.12);
+  font-family:'Syne',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);
+}
+.lang{background:rgba(91,141,238,.15);padding:2px 8px;border-radius:4px;font-size:10px;}
+pre{padding:16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.8;color:#b0bcd8;}
+.kw{color:#5b8dee;} .str{color:#5beea3;} .cm{color:#3a4460;font-style:italic;} .fn{color:#eecc5b;} .num{color:#5bdeee;} .op{color:#ee8f5b;}
+
+/* ── QUIZ CARD ── */
+.quiz{
+  background:rgba(196,91,238,.05);border:1px solid rgba(196,91,238,.2);
+  border-radius:12px;padding:20px 24px;margin:20px 0;
+}
+.quiz-label{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--a5);margin-bottom:10px;
+}
+.quiz h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.quiz-opts{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.quiz-opts li{
+  font-size:13px;color:var(--muted);padding:9px 14px;
+  background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:7px;
+  cursor:pointer;transition:all .15s;
+}
+.quiz-opts li:hover{border-color:rgba(196,91,238,.4);color:var(--text);}
+.quiz-opts li.correct{background:rgba(91,238,163,.08);border-color:rgba(91,238,163,.3);color:var(--a3);}
+.quiz-opts li.wrong{background:rgba(238,91,122,.07);border-color:rgba(238,91,122,.3);color:var(--a4);}
+.quiz-explain{
+  display:none;margin-top:12px;padding:12px 16px;
+  background:rgba(255,255,255,.03);border-radius:8px;
+  font-size:13px;color:var(--muted);
+}
+.quiz-explain.show{display:block;}
+
+/* ── GLOSSARY ── */
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin:14px 0;}
+.gitem{
+  background:rgba(255,255,255,.025);border:1px solid var(--border);
+  border-radius:9px;padding:13px 15px;
+}
+.gterm{font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:4px;}
+.gdef{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* ── CHECKLIST ── */
+.checklist{list-style:none;margin:12px 0;}
+.checklist li{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 0;border-bottom:1px solid rgba(31,38,64,.5);
+  font-size:13.5px;color:var(--muted);
+}
+.checklist li:last-child{border-bottom:none;}
+.chk{
+  width:19px;height:19px;border:1.5px solid var(--border);
+  border-radius:5px;flex-shrink:0;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:var(--a3);cursor:pointer;
+  transition:all .15s;user-select:none;
+}
+.chk:hover{border-color:var(--a3);background:rgba(91,238,163,.1);}
+
+/* ── BADGE TAGS ── */
+.badge{
+  display:inline-block;font-size:11px;font-weight:600;
+  padding:2px 10px;border-radius:20px;margin:2px 2px 2px 0;
+}
+.badge-b{background:rgba(91,141,238,.12);border:1px solid rgba(91,141,238,.25);color:var(--accent);}
+.badge-g{background:rgba(91,238,163,.1);border:1px solid rgba(91,238,163,.22);color:var(--a3);}
+.badge-o{background:rgba(238,140,91,.1);border:1px solid rgba(238,140,91,.22);color:var(--a2);}
+.badge-r{background:rgba(238,91,122,.1);border:1px solid rgba(238,91,122,.22);color:var(--a4);}
+
+/* ── SUMMARY BOX ── */
+.summary{
+  background:linear-gradient(135deg,rgba(91,141,238,.07),rgba(91,141,238,.03));
+  border:1px solid rgba(91,141,238,.25);border-radius:14px;
+  padding:24px 28px;margin:28px 0;
+}
+.summary h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--accent);margin-bottom:12px;}
+
+.divider{border:none;border-top:1px solid var(--border);margin:48px 0;}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-brand">Dataiku · Day 2</div>
+  <a href="#ch1">Visualization</a>
+  <a href="#ch2">Dashboards</a>
+  <a href="#ch3">ML Intro</a>
+  <a href="#ch4">ML Types</a>
+  <a href="#ch5">ML Workflow</a>
+  <a href="#ch6">Key Takeaways</a>
+  <a href="#quiz-sec">Practice Quiz</a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-day">📅 Day 2 · Q2 2025 · Dataiku Hands-On Training</div>
+  <h1>Data Visualization, Dashboards<br>&amp; Machine Learning Foundations</h1>
+  <p class="hero-desc">A complete self-study guide — every concept explained from first principles so you can understand it without any external help.</p>
+  <div class="topic-grid">
+    <span class="topic-chip">📊 Charts & Visualization</span>
+    <span class="topic-chip">📋 Dashboards</span>
+    <span class="topic-chip">🤖 What is Machine Learning</span>
+    <span class="topic-chip">🔢 Regression vs Classification</span>
+    <span class="topic-chip">🔬 Supervised vs Unsupervised</span>
+    <span class="topic-chip">⚙️ ML Workflow End-to-End</span>
+    <span class="topic-chip">✂️ Train-Test Split</span>
+    <span class="topic-chip">🚫 Overfitting Explained</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ══════════════════════════════════════════════════
+  CHAPTER 1 — RECAP
+══════════════════════════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-num">0</div>
+  <div class="chapter-info">
+    <div class="chapter-tag">Quick Recap</div>
+    <h2>What You Built in Day 1 — Setting the Stage</h2>
+  </div>
+</div>
+
+<p style="color:var(--muted);margin-bottom:18px;">Before diving into Day 2, it's worth understanding why you did all that work in Day 1. Every step in Day 1 was preparation for what happens now — visualizing and modelling the data.</p>
+
+<div class="concept-grid">
+  <div class="concept">
+    <span class="icon">📥</span>
+    <h4>Imported 4 Datasets</h4>
+    <p>Transaction 2021, Transaction 2022, Card Holder Info, Merchant Info — all from SQL/CSV files.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">📚</span>
+    <h4>Stacked Transactions</h4>
+    <p>Combined both years (2021 + 2022) into one table by stacking rows — now one unified dataset.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">🔗</span>
+    <h4>Joined Tables</h4>
+    <p>Linked card holder and merchant info to transactions using Left Join. Result: 18-column enriched table.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">🧹</span>
+    <h4>Cleaned &amp; Engineered Features</h4>
+    <p>Removed bad rows, created Geo points, added Spending Type and Risk columns — these are your <strong>features</strong>.</p>
+  </div>
+</div>
+
+<div class="note"><strong>Key term — Feature:</strong> A feature is simply a column in your dataset that the ML model uses to make decisions. Every column you cleaned or created in Day 1 (like Risk, Spending Type, State) is a feature. The more meaningful your features, the better your model will perform.</div>
+
+<!-- ══════════════════════════════════════════════════
+  CHAPTER 1 — VISUALIZATION
+══════════════════════════════════════════════════ -->
+<div id="ch1" class="chapter">
+  <div class="chapter-num">1</div>
+  <div class="chapter-info">
+    <div class="chapter-tag">Chapter 1</div>
+    <h2>Data Visualization — Seeing What Your Data Is Telling You</h2>
+  </div>
+</div>
+
+<div class="sec">Why Visualization Matters</div>
+
+<p style="color:var(--muted);margin-bottom:16px;">Humans are not good at reading thousands of rows of numbers. But we are extremely good at reading shapes, patterns, and colors. Visualization converts raw numbers into pictures — and that lets us spot patterns, anomalies, and trends that would be invisible in a spreadsheet.</p>
+
+<div class="analogy">
+  <div class="analogy-label">Real-World Analogy</div>
+  <p>Imagine you have 1 million transactions written in a spreadsheet. Trying to spot fraud by reading row by row would take years. But if you plot transaction amounts on a chart and fraud transactions appear as outliers far above the average, you can see the problem in 5 seconds. That's the power of visualization.</p>
+</div>
+
+<div class="sec">What Dataiku Built in Day 2 — The 3 Charts</div>
+
+<div class="card">
+  <h3>📊 Chart 1 — Bar Chart: Average Purchase Amount by Spending Type</h3>
+  <p><strong>What it shows:</strong> A bar for each spending category (Essential, Discretionary, Standard). The height of each bar = the average purchase amount in that category.</p>
+  <p><strong>Why it's useful:</strong> You can immediately see — do fraudulent transactions happen more in luxury purchases? Are the average amounts very different between categories? This helps you understand the financial behavior patterns in your data.</p>
+  <p><strong>How to read it:</strong> Taller bar = higher average purchase amount. If the "Discretionary" bar is twice as tall as "Essential", it means discretionary purchases cost, on average, twice as much.</p>
+
+  <div class="note"><strong>In Dataiku:</strong> Open your prepared dataset → Charts tab → Select <em>Bar chart</em> → Drag <em>spending_type</em> to X-axis → Drag <em>purchase_amount</em> to Y-axis → Set Y-axis aggregation to <em>Average</em>.</div>
+</div>
+
+<div class="card">
+  <h3>🥧 Chart 2 — Pie Chart: Transaction Distribution by Risk</h3>
+  <p><strong>What it shows:</strong> Three slices — High, Medium, Low risk. The size of each slice represents the proportion of all transactions that fall into that risk level.</p>
+  <p><strong>Why it's useful:</strong> At a glance you can see: "What percentage of our transactions are high risk?" If the High slice is 30%, that's a major red flag and needs immediate attention. If it's 2%, the risk is manageable.</p>
+  <p><strong>How to read it:</strong> Bigger slice = more transactions in that category. The percentages should add up to 100%.</p>
+
+  <div class="tip"><strong>Tip:</strong> Pie charts work best when you have 3–5 categories. With more categories, slices become tiny and hard to compare. For many categories, use a bar chart instead.</div>
+</div>
+
+<div class="card">
+  <h3>🗺️ Chart 3 — Geo Map: Fraud vs Authorized Transactions by Region</h3>
+  <p><strong>What it shows:</strong> A geographic map with dots or heat regions showing where authorized and fraudulent transactions happened. Different colors represent fraud vs. authorized.</p>
+  <p><strong>Why it's useful:</strong> Geography can be a strong fraud signal. If most fraud originates from one state but the cardholder lives in another state, that's suspicious. This chart makes geographic anomalies immediately visible.</p>
+  <p><strong>What was needed first:</strong> This is why you created the <em>Geo points</em> and extracted <em>card_state</em> and <em>merchant_state</em> in Day 1! Without those columns, you can't plot anything on a map.</p>
+
+  <div class="note"><strong>In Dataiku:</strong> Charts tab → Select <em>Map (Scatter)</em> → Drag <em>merchant_location</em> to the map field → Set color to <em>flag_description</em> (Authorized vs Fraud) → Each point on the map is one transaction, colored by whether it was fraudulent.</div>
+</div>
+
+<div class="sec">The Sampling Problem — Getting Accurate Charts</div>
+
+<p style="color:var(--muted);margin-bottom:14px;">This is a critical concept that came up in Day 1 and applies directly to visualization.</p>
+
+<div class="card">
+  <h3>Why the Default Sample Can Mislead You</h3>
+  <p>By default, Dataiku shows you the <strong>first 10,000 rows</strong> of your dataset as a sample. For a quick preview, this is fine. But for charts, it can be dangerously misleading.</p>
+  <p><strong>The problem:</strong> Imagine your data was sorted by date. The first 10,000 rows might be all January 2021 data. If you draw a pie chart showing fraud distribution, it only reflects January — not the full year. The chart would show a completely wrong picture.</p>
+
+  <div class="diagram">
+    <p style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Sample Type Comparison</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="background:rgba(238,91,122,.05);border:1px solid rgba(238,91,122,.2);border-radius:8px;padding:14px;">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--a4);margin-bottom:8px;">❌ First 10,000 Rows (Default)</div>
+        <p style="font-size:12.5px;color:var(--muted);">Picks the first 10K rows. If data is sorted, this only captures one time period or one category. Charts are biased and misleading.</p>
+      </div>
+      <div style="background:rgba(91,238,163,.05);border:1px solid rgba(91,238,163,.2);border-radius:8px;padding:14px;">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--a3);margin-bottom:8px;">✅ Random Sample</div>
+        <p style="font-size:12.5px;color:var(--muted);">Picks rows randomly from across the entire dataset. Gives a representative view of the whole data. Charts reflect reality.</p>
+      </div>
+    </div>
+  </div>
+
+  <p><strong>Best practice:</strong> For visualization, always switch to random sampling OR compute charts on the <em>whole dataset</em> (Analyze → Whole Data) for maximum accuracy.</p>
+
+  <div class="tip"><strong>In Dataiku:</strong> Dataset → Sample tab → Change "First N records" to "Random" → Set count to 10,000 → Apply. Now your charts will accurately represent the full dataset.</div>
+</div>
+
+<div class="sec">Types of Charts — When to Use What</div>
+
+<div class="concept-grid">
+  <div class="concept">
+    <span class="icon">📊</span>
+    <h4>Bar Chart</h4>
+    <p>Compare values across categories. Use when you want to ask: "Which category has the most / highest average?" Best for 2–15 categories.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">🥧</span>
+    <h4>Pie / Donut Chart</h4>
+    <p>Show proportions of a whole. Use when you want to ask: "What percentage does each category represent?" Best for 3–5 categories.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">📈</span>
+    <h4>Line Chart</h4>
+    <p>Show trends over time. Use when one axis is a date/time and you want to see how a value changes over time.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">🔵</span>
+    <h4>Scatter Plot</h4>
+    <p>Show relationship between two numbers. Useful for spotting correlations — e.g., does higher purchase amount correlate with fraud?</p>
+  </div>
+  <div class="concept">
+    <span class="icon">🗺️</span>
+    <h4>Geo Map</h4>
+    <p>Plot data on a geographic map. Requires latitude/longitude or Geo point columns. Best for regional analysis.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">📦</span>
+    <h4>Box Plot</h4>
+    <p>Show distribution of a number — minimum, maximum, median, quartiles. Useful for spotting outliers.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+  CHAPTER 2 — DASHBOARDS
+══════════════════════════════════════════════════ -->
+<div id="ch2" class="chapter">
+  <div class="chapter-num">2</div>
+  <div class="chapter-info">
+    <div class="chapter-tag">Chapter 2</div>
+    <h2>Dashboards — Packaging Insights for Your Team</h2>
+  </div>
+</div>
+
+<div class="sec">What is a Dashboard?</div>
+
+<p style="color:var(--muted);margin-bottom:16px;">A dashboard is a single page that displays multiple charts, tables, and key metrics together. Think of it like the dashboard of a car — it shows you speed, fuel, temperature all at once. You don't have to look at each instrument separately; everything important is in one view.</p>
+
+<div class="analogy">
+  <div class="analogy-label">Real-World Analogy</div>
+  <p>A fraud analyst needs to check: total transactions today, fraud rate, which states have the most fraud, average transaction size by category — every morning. Instead of running 4 separate charts every day, a dashboard shows all of this automatically on one screen, updated and ready to review.</p>
+</div>
+
+<div class="sec">How Dashboards Work in Dataiku</div>
+
+<div class="steps">
+  <div class="step">
+    <div class="step-l"><div class="step-n">1</div><div class="step-line"></div></div>
+    <div class="step-b">
+      <h4>Create Charts First</h4>
+      <p>You build individual charts inside datasets (Charts tab). Each chart answers one specific question.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-l"><div class="step-n">2</div><div class="step-line"></div></div>
+    <div class="step-b">
+      <h4>Publish Charts to a Dashboard</h4>
+      <p>From any chart, click the <strong>Publish</strong> button → choose an existing dashboard or create a new one. The chart is now added as a tile (a panel inside the dashboard).</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-l"><div class="step-n">3</div><div class="step-line"></div></div>
+    <div class="step-b">
+      <h4>Arrange Tiles</h4>
+      <p>Inside the dashboard, drag and resize tiles to arrange them visually. Put the most important charts at the top.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-l"><div class="step-n">4</div><div class="step-line"></div></div>
+    <div class="step-b">
+      <h4>Add Dataset Tiles</h4>
+      <p>You can also add raw datasets as tiles — this shows a sample of the actual data table directly in the dashboard. Note: this always shows a sample, not the full dataset.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-l"><div class="step-n">5</div><div class="step-line"></div></div>
+    <div class="step-b">
+      <h4>Share with Business Users</h4>
+      <p>Give colleagues <em>AI Consumer (Viewer)</em> access to your project. They can see and interact with the dashboard — apply filters, hover for details — without modifying anything. They don't need a Designer license.</p>
+    </div>
+  </div>
+</div>
+
+<div class="sec">Dashboard Features — What Users Can Do</div>
+
+<div class="card">
+  <h3>Interactivity for Business Users</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;">
+    <div>
+      <p><strong>Filtering:</strong> Click on a chart element (e.g., a bar) to filter all other charts on the same dashboard to show only that category. For example, click "High Risk" on the pie chart → all other charts update to show only high-risk transactions.</p>
+    </div>
+    <div>
+      <p><strong>Hovering:</strong> Hover over any chart element to see the exact numbers behind it. The chart shows a tooltip with precise values.</p>
+    </div>
+    <div>
+      <p><strong>Zooming (line charts):</strong> Click and drag on a time-series chart to zoom into a specific time range.</p>
+    </div>
+    <div>
+      <p><strong>Download:</strong> Charts and dashboards can be downloaded as images or PDFs for reports and presentations.</p>
+    </div>
+  </div>
+</div>
+
+<div class="key-idea"><strong>Key insight:</strong> Dashboards are the "last mile" of a data project — they're how the business actually uses the work you did. All your cleaning, joining, and feature creation becomes invisible to the business user. All they see is the dashboard, and they ask: "Can I filter by region?" That's why dashboards matter — they bridge the technical work and business decision-making.</div>
+
+<!-- ══════════════════════════════════════════════════
+  CHAPTER 3 — ML INTRODUCTION
+══════════════════════════════════════════════════ -->
+<div id="ch3" class="chapter">
+  <div class="chapter-num">3</div>
+  <div class="chapter-info">
+    <div class="chapter-tag">Chapter 3</div>
+    <h2>Machine Learning — What It Is and Why It Exists</h2>
+  </div>
+</div>
+
+<div class="sec">The Problem ML Solves</div>
+
+<p style="color:var(--muted);margin-bottom:16px;">Before machine learning, humans had to write explicit rules for every decision. For fraud detection, that might be: <em>"Flag a transaction if: amount &gt; $1000 AND it's in a different state AND it's after midnight."</em> The problem? Fraudsters quickly learn your rules and find ways around them. Rules also miss new fraud patterns you haven't thought of yet.</p>
+
+<div class="analogy">
+  <div class="analogy-label">Real-World Analogy</div>
+  <p>Imagine teaching a child to recognize cats by giving them rules: "4 legs, whiskers, pointy ears, meows." That works for a typical cat. But what about a cat that lost a leg? Or a cat sleeping with ears flat? The rules break. A child who has seen 1000 cats develops an <em>intuition</em> — they just know it's a cat, even unusual ones. Machine learning does the same thing: it looks at thousands of examples and develops its own "intuition" (patterns) rather than following rigid rules.</p>
+</div>
+
+<div class="card">
+  <h3>The Formal Definition — In Plain English</h3>
+  <p><strong>Machine Learning</strong> is a method where you show a computer many examples of inputs and the correct outputs, and the computer figures out the relationship (pattern) between them automatically. Once trained, it can predict the output for new inputs it has never seen before.</p>
+  <p><strong>In our fraud detection case:</strong> You show the model 1 million past transactions, each labelled "fraud" or "not fraud" (along with all their attributes like amount, location, risk level). The model finds patterns — combinations of features that predict fraud. Then you give it a new, unlabelled transaction and it predicts: fraud or not fraud?</p>
+</div>
+
+<div class="sec">The 3 Ingredients of Every ML Problem</div>
+
+<div style="display:flex;flex-direction:column;gap:4px;margin:16px 0;">
+  <div class="defpair">
+    <div class="dk">Data (rows)</div>
+    <div class="dv">Each row is one <strong>observation</strong> — one transaction, one customer, one event. In our project: each row = one credit card transaction.</div>
+  </div>
+  <div class="defpair">
+    <div class="dk">Features (X)</div>
+    <div class="dv">The <strong>input columns</strong> — everything the model can use to make its prediction. E.g., purchase_amount, risk_level, card_state, merchant_state, spending_type.</div>
+  </div>
+  <div class="defpair">
+    <div class="dk">Target (Y)</div>
+    <div class="dv">The <strong>output column</strong> — what you're trying to predict. In our project: <code style="font-family:monospace;color:var(--a2)">authorised_flag</code> — is the transaction fraud (0) or authentic (1)?</div>
+  </div>
+</div>
+
+<div class="note"><strong>Important:</strong> The target (Y) must be a real column in your training data. In our project, 2021 data has <code style="font-family:monospace">authorised_flag</code> filled (0 or 1) — this is the training data. 2022 data has this column as NULL — this is what the model will predict. That's why we stacked them together and will split them apart later.</div>
+
+<div class="sec">How a Model Actually "Learns" — Intuition</div>
+
+<div class="card">
+  <h3>The Learning Process — Step by Step</h3>
+  <p>You don't need to know the math, but understanding the concept helps enormously.</p>
+  <div class="steps" style="margin-top:14px;">
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a2);">1</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>The model makes a guess</h4>
+        <p>Given a transaction's features, the untrained model makes a random guess: fraud or not fraud.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a2);">2</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Compare the guess to reality</h4>
+        <p>The model compares its guess to the real label (authorised_flag). If the real label says "fraud" but the model said "not fraud", that's an error.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a2);">3</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Adjust internal weights</h4>
+        <p>The model slightly adjusts its internal parameters (weights) to make fewer errors. It learns: "transactions with purchase_amount > $500 and signature_provided = 0 are more likely fraud."</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a2);">4</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Repeat thousands of times</h4>
+        <p>This process repeats for all training examples, thousands of times. Each iteration, the model gets a little bit better at finding the patterns in the data.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a3);">5</div></div>
+      <div class="step-b">
+        <h4>Model is trained — ready to predict</h4>
+        <p>After training, the model has "memorised" the patterns. Now give it a new transaction it's never seen, and it predicts fraud or not fraud based on those learned patterns.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+  CHAPTER 4 — TYPES OF ML
+══════════════════════════════════════════════════ -->
+<div id="ch4" class="chapter">
+  <div class="chapter-num">4</div>
+  <div class="chapter-info">
+    <div class="chapter-tag">Chapter 4</div>
+    <h2>Types of Machine Learning — The Full Map</h2>
+  </div>
+</div>
+
+<div class="sec">The Two Big Categories</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0;">
+  <div class="card" style="border-color:rgba(91,141,238,.35);">
+    <h3>🏷️ Supervised Learning</h3>
+    <p><strong>Definition:</strong> You have both input data (X = features) AND the correct output labels (Y = target). The model learns from labelled examples.</p>
+    <p><strong>Analogy:</strong> A student studying with an answer key. They see the question AND the correct answer, so they can learn the pattern.</p>
+    <p><strong>Our project:</strong> 2021 transactions have authorised_flag filled → this is supervised learning data. ✅</p>
+    <p style="margin-top:8px;"><span class="badge badge-b">Has Labels</span> <span class="badge badge-b">Learns pattern</span> <span class="badge badge-b">Predicts new data</span></p>
+  </div>
+  <div class="card" style="border-color:rgba(238,140,91,.35);">
+    <h3>🔍 Unsupervised Learning</h3>
+    <p><strong>Definition:</strong> You only have input data (X). There are NO labels/answers. The model finds hidden structure or groups in the data on its own.</p>
+    <p><strong>Analogy:</strong> A student given a stack of essays with no grades — they have to figure out which ones are "similar" by reading them and grouping them themselves.</p>
+    <p><strong>Common use:</strong> Customer segmentation — "Group our customers into similar types" without telling the model what the groups should be.</p>
+    <p style="margin-top:8px;"><span class="badge badge-o">No Labels</span> <span class="badge badge-o">Finds clusters</span> <span class="badge badge-o">Discovers groups</span></p>
+  </div>
+</div>
+
+<div class="sec">The Two Types of Supervised Learning</div>
+
+<div class="card">
+  <h3>Understanding the Difference: Regression vs Classification</h3>
+  <p>Both are supervised. The only difference is the <strong>type of answer they produce</strong>:</p>
+  <table class="tbl" style="margin-top:14px;">
+    <tr><th>Property</th><th>Regression</th><th>Classification</th></tr>
+    <tr><td>Output type</td><td class="hl"><strong>A number</strong> (continuous)</td><td class="hl" style="color:var(--a2);"><strong>A category</strong> (discrete)</td></tr>
+    <tr><td>The question it answers</td><td>"How much?" or "How many?"</td><td>"Which one?" or "Is it X or Y?"</td></tr>
+    <tr><td>Example output</td><td>$347.50 / 23 units / 72 degrees</td><td>Fraud / Not Fraud / Yes / No</td></tr>
+    <tr><td>Simple example</td><td>Predict house price from size</td><td>Predict if email is spam or not</td></tr>
+    <tr><td>Training example from session</td><td>Predict price from area (sq ft)</td><td>Predict if patient is diabetic (Yes/No)</td></tr>
+    <tr><td>Our fraud project</td><td>Not applicable</td><td><strong>Predict authorised_flag: 0 or 1</strong> ✅</td></tr>
+  </table>
+</div>
+
+<div class="concept-grid" style="margin-top:18px;">
+  <div class="concept">
+    <span class="icon">📐</span>
+    <h4>Regression Examples</h4>
+    <p>Predict house price. Predict employee salary. Predict tomorrow's stock price. Predict how many units will sell. Predict a student's exam score.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">🎯</span>
+    <h4>Binary Classification</h4>
+    <p>Two categories only. Fraud / Not Fraud. Spam / Not Spam. Will customer churn / Won't churn. Will loan default / Won't default.</p>
+  </div>
+  <div class="concept">
+    <span class="icon">🎨</span>
+    <h4>Multi-Class Classification</h4>
+    <p>More than two categories. Predict dog breed (50+ breeds). Predict product category. Classify customer sentiment (positive/neutral/negative).</p>
+  </div>
+  <div class="concept">
+    <span class="icon">🔵</span>
+    <h4>Clustering (Unsupervised)</h4>
+    <p>Group similar customers together. No labels needed. K-Means is the most famous algorithm. Used for customer segmentation.</p>
+  </div>
+</div>
+
+<div class="key-idea"><strong>Why does the distinction matter?</strong> In Dataiku (and all ML tools), you must choose whether you're doing regression or classification when setting up your model. If you pick the wrong type, the model will be nonsensical — like asking for "the average" of categories like Fraud/Not Fraud. Always ask yourself: "Is my target a number or a category?" That immediately tells you which type to use.</div>
+
+<!-- ══════════════════════════════════════════════════
+  CHAPTER 5 — ML WORKFLOW
+══════════════════════════════════════════════════ -->
+<div id="ch5" class="chapter">
+  <div class="chapter-num">5</div>
+  <div class="chapter-info">
+    <div class="chapter-tag">Chapter 5</div>
+    <h2>The ML Workflow — From Raw Data to Working Model</h2>
+  </div>
+</div>
+
+<div class="sec">The Complete ML Pipeline</div>
+
+<div class="diagram">
+  <p style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;">End-to-End ML Workflow</p>
+  <div class="flow-row">
+    <div class="flow-node">📥<br><small>Data Collection</small></div>
+    <div class="flow-arr">→</div>
+    <div class="flow-node orange">🔍<br><small>EDA</small></div>
+    <div class="flow-arr">→</div>
+    <div class="flow-node">🧹<br><small>Feature Engineering</small></div>
+    <div class="flow-arr">→</div>
+    <div class="flow-node purple">✂️<br><small>Train-Test Split</small></div>
+    <div class="flow-arr">→</div>
+    <div class="flow-node orange">🏋️<br><small>Train Model</small></div>
+    <div class="flow-arr">→</div>
+    <div class="flow-node green">📊<br><small>Evaluate</small></div>
+    <div class="flow-arr">→</div>
+    <div class="flow-node green">🚀<br><small>Predict / Deploy</small></div>
+  </div>
+</div>
+
+<div class="sec">Step 1 — Data Collection</div>
+<div class="card">
+  <h3>Rows = Observations, Columns = Features</h3>
+  <p>The first step is getting your data into Dataiku. We did this in Day 1 — importing from CSV files representing a Brazilian bank's transaction data. But in real projects, data comes from many sources: SQL databases, APIs, cloud storage, real-time streams.</p>
+  <p><strong>Key questions to ask about your data:</strong></p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;font-size:13.5px;color:var(--muted);">
+    <div>• How many rows? (enough to train a model?)</div>
+    <div>• How many columns? (features available)</div>
+    <div>• What time period does it cover?</div>
+    <div>• Is the target column already labelled?</div>
+    <div>• Are there missing values?</div>
+    <div>• Is the data balanced? (equal fraud/not fraud?)</div>
+  </div>
+  <div class="tip" style="margin-top:12px;"><strong>In our project:</strong> 1.3 million+ transactions across 2021–2022. 18 columns after joining. Target column (authorised_flag) has values 0 and 1 for 2021, and NULL for 2022 (to be predicted).</div>
+</div>
+
+<div class="sec">Step 2 — Exploratory Data Analysis (EDA)</div>
+<div class="card">
+  <h3>Understanding Your Data Before Modelling — The Critical Step Many Skip</h3>
+  <p>EDA means carefully exploring and visualizing your data before building any model. The reason: garbage in = garbage out. If you don't understand what's in your data, your model will silently fail and you won't know why.</p>
+  <p><strong>What EDA involves:</strong></p>
+  <div class="steps" style="margin-top:10px;">
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="width:26px;height:26px;font-size:11px;">A</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Check for Missing Values</h4>
+        <p>In Dataiku: open a dataset → Columns tab → look for columns with high % of errors or empty values. A column with 60% missing values is probably useless for training.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="width:26px;height:26px;font-size:11px;">B</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Check Class Balance</h4>
+        <p>For fraud detection: are there equal numbers of fraud and non-fraud transactions? If 99% are "not fraud" and only 1% are "fraud", the model might just predict "not fraud" for everything and still get 99% accuracy — which is useless! This is called <strong>class imbalance</strong> and must be addressed.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="width:26px;height:26px;font-size:11px;">C</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Look for Correlations</h4>
+        <p>Which features correlate with fraud? In Dataiku, look at statistics — does average purchase_amount differ between fraud and non-fraud? Do certain states have more fraud? These correlations become strong features.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="width:26px;height:26px;font-size:11px;">D</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Spot Outliers</h4>
+        <p>Extreme values can confuse a model. A transaction of $1,000,000 might be an error or a genuinely unusual case. Visualization helps spot these. In Dataiku: Analyze a column → look at the histogram for far-off values.</p>
+      </div>
+    </div>
+  </div>
+  <div class="analogy" style="margin-top:14px;">
+    <div class="analogy-label">Analogy</div>
+    <p>EDA is like a doctor reviewing a patient's full medical history before diagnosing. You wouldn't guess a diagnosis without looking at the test results first. EDA is looking at your data's "test results" before prescribing a model.</p>
+  </div>
+</div>
+
+<div class="sec">Step 3 — Feature Engineering (The Most Important Step)</div>
+<div class="card">
+  <h3>Turning Raw Data Into Meaningful Signals for the Model</h3>
+  <p>Raw data alone is often not very informative. Feature engineering means <strong>creating new columns</strong> from existing ones that are more predictive. This is an art form — it requires domain knowledge and creativity.</p>
+  <p><strong>In our project, we already did feature engineering in Day 1:</strong></p>
+  <table class="tbl" style="margin-top:12px;">
+    <tr><th>Raw Data</th><th>Engineered Feature</th><th>Why It Helps</th></tr>
+    <tr><td><code style="font-family:monospace;color:var(--a2)">merchant_lat, merchant_lng</code></td><td class="hl"><strong>merchant_location</strong> (Geopoint)</td><td>Geographic point enables map visualizations and distance calculations</td></tr>
+    <tr><td><code style="font-family:monospace;color:var(--a2)">lat, lng</code> → Geopoint</td><td class="hl"><strong>card_state, merchant_state</strong></td><td>State name is more meaningful to a model than raw coordinates</td></tr>
+    <tr><td><code style="font-family:monospace;color:var(--a2)">merchant_sub_sector</code></td><td class="hl"><strong>spending_type</strong> (Essential/Discretionary/Standard)</td><td>Broader category is more predictive than hundreds of specific sub-sectors</td></tr>
+    <tr><td><code style="font-family:monospace;color:var(--a2)">purchase_amount + signature_provided</code></td><td class="hl"><strong>risk</strong> (High/Medium/Low)</td><td>A human-designed risk signal directly related to fraud likelihood</td></tr>
+    <tr><td><code style="font-family:monospace;color:var(--a2)">authorised_flag</code> (0/1)</td><td class="hl"><strong>flag_description</strong> (Fraud/Authorised)</td><td>Text label for human readability in charts and dashboards</td></tr>
+  </table>
+  <div class="key-idea" style="margin-top:14px;"><strong>Rule of thumb:</strong> A good feature is one that a smart human analyst would look at to decide "is this fraud?" — purchase amount, location mismatch between card holder and merchant, transaction time, spending category. If an experienced fraud analyst would consider it, it's probably a valuable feature for your model.</div>
+</div>
+
+<div class="sec" id="split-section">Step 4 — Train-Test Split (80/20) — The Most Important Concept in ML Evaluation</div>
+
+<div class="card">
+  <h3>The Core Problem: How Do You Know If Your Model Actually Works?</h3>
+  <p>Here's the fundamental challenge: a model trained on data will always perform extremely well on <em>that same data</em> — because it already "saw" those examples. But that tells you nothing about how it will perform on <strong>new, unseen data</strong> — which is the only thing that matters in real life.</p>
+
+  <div class="analogy">
+    <div class="analogy-label">Analogy — The Student and the Exam</div>
+    <p>Imagine a student who memorizes all 100 past exam questions and their answers. On those exact questions, they score 100%. But on a new exam with different questions, they fail — because they memorized, not understood. In ML, this is called <strong>overfitting</strong>. The model "memorized" the training data instead of learning the underlying pattern.</p>
+  </div>
+
+  <p><strong>The solution:</strong> Before training, split your data into two parts:</p>
+
+  <div style="display:grid;grid-template-columns:3fr 1fr;gap:12px;margin:16px 0;">
+    <div style="background:rgba(91,141,238,.06);border:1.5px solid rgba(91,141,238,.25);border-radius:10px;padding:16px;">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--accent);margin-bottom:8px;">🏋️ Training Set — 80%</div>
+      <p style="font-size:13px;color:var(--muted);">The model is shown this data during training. It learns the patterns from these examples. The model <em>can</em> see the answers (labels) during training.</p>
+    </div>
+    <div style="background:rgba(91,238,163,.05);border:1.5px solid rgba(91,238,163,.22);border-radius:10px;padding:16px;">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--a3);margin-bottom:8px;">🧪 Test Set — 20%</div>
+      <p style="font-size:13px;color:var(--muted);">This data is <em>hidden</em> from the model during training. After training, the model makes predictions on this data — and we compare predictions to actual labels to evaluate accuracy.</p>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <p style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Visual Representation of 80/20 Split</p>
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;height:32px;display:flex;margin-bottom:10px;">
+      <div style="width:80%;background:linear-gradient(90deg,rgba(91,141,238,.35),rgba(91,141,238,.2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--accent);">TRAINING SET — 80% (1,040,000 rows)</div>
+      <div style="width:20%;background:linear-gradient(90deg,rgba(91,238,163,.2),rgba(91,238,163,.35));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--a3);">TEST — 20%</div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);text-align:center;">Out of 1,300,000 total rows: 1,040,000 for training + 260,000 for testing</p>
+  </div>
+
+  <div class="note"><strong>Critical rule:</strong> The test set must <em>never</em> be seen by the model during training. If even one test row is used in training, your evaluation becomes invalid — the model has already "memorized" it. In Dataiku, this is handled automatically when you set up the ML task — just select 80/20 and Dataiku manages it.</div>
+</div>
+
+<div class="card" style="margin-top:0;">
+  <h3>Understanding Overfitting vs Underfitting — Two Ways a Model Fails</h3>
+  <table class="tbl">
+    <tr><th></th><th>Overfitting</th><th>Underfitting</th></tr>
+    <tr><td><strong>What happened</strong></td><td>Model memorized training data, learned noise</td><td>Model too simple, didn't learn enough</td></tr>
+    <tr><td><strong>Training accuracy</strong></td><td class="hl">Very HIGH (99%)</td><td>Low (60%)</td></tr>
+    <tr><td><strong>Test accuracy</strong></td><td class="hl" style="color:var(--a4);">Much LOWER (70%)</td><td>Also Low (62%)</td></tr>
+    <tr><td><strong>The gap</strong></td><td>Large gap between train and test accuracy</td><td>Both scores are low</td></tr>
+    <tr><td><strong>Student analogy</strong></td><td>Memorized textbook problems, fails new ones</td><td>Didn't study enough, fails everything</td></tr>
+    <tr><td><strong>Fix</strong></td><td>More data, simpler model, regularization</td><td>More complex model, more features</td></tr>
+  </table>
+  <div class="tip" style="margin-top:12px;"><strong>Good model:</strong> Training accuracy ≈ Test accuracy (both high). The gap is small, meaning the model genuinely learned the pattern — not just memorized the examples.</div>
+</div>
+
+<div class="sec">Step 5 — Training the Model (AutoML in Dataiku)</div>
+<div class="card">
+  <h3>What Happens When You Click "Train" in Dataiku</h3>
+  <p>In Dataiku, you don't need to write complex ML code. You use the <strong>Visual ML (AutoML)</strong> feature. Here's what happens behind the scenes:</p>
+  <div class="steps" style="margin-top:12px;">
+    <div class="step">
+      <div class="step-l"><div class="step-n">1</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>You specify the target column</h4>
+        <p>Tell Dataiku: "I want to predict <code style="font-family:monospace;color:var(--a2)">authorised_flag</code>." Dataiku sees it has values 0 and 1 → automatically identifies this as a <strong>binary classification</strong> problem.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n">2</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Dataiku suggests features</h4>
+        <p>AutoML looks at all your columns and recommends which ones to use as features. It automatically handles encoding (converting text categories like "High/Medium/Low" into numbers the model can understand).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n">3</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Dataiku tries multiple algorithms</h4>
+        <p>AutoML runs several different algorithms — Random Forest, Gradient Boosting, Logistic Regression, etc. — and finds the one that performs best on your data. You don't need to pick an algorithm manually.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n">4</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Training happens automatically</h4>
+        <p>Each algorithm trains on the 80% training data, adjusting its parameters to minimize prediction errors. Dataiku shows a progress bar.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n">5</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Evaluation on the 20% test set</h4>
+        <p>After training, Dataiku tests each model on the held-out 20% test data and reports accuracy, precision, recall, and AUC-ROC scores.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">Step 6 — Evaluation Metrics — How to Know If Your Model Is Good</div>
+<div class="card">
+  <h3>Common Metrics Explained Simply</h3>
+  <table class="tbl">
+    <tr><th>Metric</th><th>Plain English Meaning</th><th>Range</th><th>Good Value</th></tr>
+    <tr>
+      <td><strong>Accuracy</strong></td>
+      <td>Out of all predictions, what % were correct?</td>
+      <td>0–100%</td>
+      <td class="hl">&gt;85% (but watch for class imbalance!)</td>
+    </tr>
+    <tr>
+      <td><strong>Precision</strong></td>
+      <td>Of all transactions the model flagged as fraud, what % were actually fraud? (avoids false alarms)</td>
+      <td>0–100%</td>
+      <td class="hl">&gt;75% for fraud detection</td>
+    </tr>
+    <tr>
+      <td><strong>Recall</strong></td>
+      <td>Of all actual fraud transactions, what % did the model catch? (avoids missing fraud)</td>
+      <td>0–100%</td>
+      <td class="hl">&gt;80% for fraud detection</td>
+    </tr>
+    <tr>
+      <td><strong>AUC-ROC</strong></td>
+      <td>Overall model quality regardless of threshold. 0.5 = random guessing. 1.0 = perfect model.</td>
+      <td>0.5–1.0</td>
+      <td class="hl">&gt;0.85 is very good</td>
+    </tr>
+  </table>
+  <div class="analogy" style="margin-top:14px;">
+    <div class="analogy-label">Precision vs Recall — The Security Guard Analogy</div>
+    <p><strong>High Precision, Low Recall:</strong> A very strict guard who only flags people he's 100% sure are threats. Very few false alarms, but many actual threats slip through.<br><br><strong>High Recall, Low Precision:</strong> A paranoid guard who flags everyone even slightly suspicious. Catches all real threats but creates many false alarms, inconveniencing innocent people.<br><br><strong>For fraud detection:</strong> You want high Recall (don't miss any fraud) but also good Precision (don't block legitimate customers unnecessarily).</p>
+  </div>
+</div>
+
+<div class="sec">Step 7 — Prediction (Scoring)</div>
+<div class="card">
+  <h3>Applying the Trained Model to New Data</h3>
+  <p>Once your model is trained and evaluated, you apply it to the 2022 data (where authorised_flag = NULL) to generate predictions.</p>
+  <div class="diagram">
+    <div class="flow-row">
+      <div class="flow-node">2022 Transactions<br><small>(no labels)</small></div>
+      <div class="flow-arr">→</div>
+      <div class="flow-node orange">Trained Model<br><small>(learned patterns)</small></div>
+      <div class="flow-arr">→</div>
+      <div class="flow-node green">Predictions<br><small>fraud / not fraud + confidence %</small></div>
+    </div>
+  </div>
+  <p>In Dataiku: after training, a <strong>Score recipe</strong> is created in your Flow automatically. It applies your model to the 2022 data and creates a new dataset with predicted labels and confidence scores (e.g., "92% confident this is fraud").</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+  CHAPTER 6 — KEY TAKEAWAYS
+══════════════════════════════════════════════════ -->
+<div id="ch6" class="chapter">
+  <div class="chapter-num">6</div>
+  <div class="chapter-info">
+    <div class="chapter-tag">Chapter 6</div>
+    <h2>Key Takeaways — Bringing It All Together</h2>
+  </div>
+</div>
+
+<div class="sec">The 4 Big Lessons from Day 2</div>
+
+<div class="concept-grid">
+  <div class="concept" style="border-color:rgba(91,141,238,.35);">
+    <span class="icon">🔧</span>
+    <h4>Feature Creation Is Everything</h4>
+    <p>80% of a model's success comes from the quality of features, not from which algorithm you pick. A simple model with excellent features beats a complex model with poor features every time.</p>
+  </div>
+  <div class="concept" style="border-color:rgba(91,238,163,.35);">
+    <span class="icon">👁️</span>
+    <h4>Visualization Drives Understanding</h4>
+    <p>You cannot build a good model on data you don't understand. Charts reveal patterns, anomalies, and distributions that are invisible in raw numbers. Always visualize before modelling.</p>
+  </div>
+  <div class="concept" style="border-color:rgba(238,140,91,.35);">
+    <span class="icon">📋</span>
+    <h4>Dashboards Enable Action</h4>
+    <p>A model that lives in a notebook helps no one. Dashboards turn technical insights into business actions — they're how your work creates actual value for the organization.</p>
+  </div>
+  <div class="concept" style="border-color:rgba(196,91,238,.35);">
+    <span class="icon">🤖</span>
+    <h4>ML Automates Pattern Detection</h4>
+    <p>ML replaces the need for manual rules. Instead of writing "if X and Y then fraud", the model discovers thousands of subtle pattern combinations automatically — and it keeps learning as patterns change.</p>
+  </div>
+</div>
+
+<div class="sec">The Complete Day 2 Story — How It All Connects</div>
+
+<div class="summary">
+  <h3>🧵 The Thread That Connects Everything</h3>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Day 2 takes everything built in Day 1 and uses it in two ways — <em>understanding</em> (visualization + dashboards) and <em>automation</em> (machine learning). Here's the logical flow:</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a5);">→</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Day 1 gave you clean, feature-rich data</h4>
+        <p>18 columns including engineered features like Risk, Spending Type, State. This is the foundation for everything in Day 2.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a5);">→</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Visualization helps you understand what patterns exist</h4>
+        <p>Bar chart: discretionary spending = higher average amounts. Pie chart: 15% high-risk transactions. Geo map: fraud clusters in specific states. Now you understand your data deeply.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a5);">→</div><div class="step-line"></div></div>
+      <div class="step-b">
+        <h4>Dashboards package insights for business users</h4>
+        <p>The fraud analyst, manager, and compliance team can see these insights daily without touching Dataiku's technical side.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-l"><div class="step-n" style="background:var(--a5);">→</div></div>
+      <div class="step-b">
+        <h4>ML automates the fraud prediction at scale</h4>
+        <p>Instead of a human analyst reviewing each transaction, the model evaluates 10,000 transactions per second, flags the suspicious ones, and gives a confidence score. The analyst reviews only the flagged ones.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+  QUIZ SECTION
+══════════════════════════════════════════════════ -->
+<div id="quiz-sec" class="chapter">
+  <div class="chapter-num">?</div>
+  <div class="chapter-info">
+    <div class="chapter-tag">Self-Assessment</div>
+    <h2>Practice Quiz — Test Your Understanding</h2>
+  </div>
+</div>
+
+<p style="color:var(--muted);margin-bottom:20px;">Click each option to check your answer. These are the kinds of questions that test whether you truly understood the concepts — not just memorized them.</p>
+
+<div class="quiz">
+  <div class="quiz-label">Question 1 of 8</div>
+  <h4>You want to predict the selling price of a house based on its size, location, and age. What type of ML problem is this?</h4>
+  <ul class="quiz-opts" id="q1">
+    <li onclick="answer(this,'q1',false,'q1-exp')">Binary Classification</li>
+    <li onclick="answer(this,'q1',true,'q1-exp')">Regression ✓</li>
+    <li onclick="answer(this,'q1',false,'q1-exp')">Unsupervised Clustering</li>
+    <li onclick="answer(this,'q1',false,'q1-exp')">Multi-class Classification</li>
+  </ul>
+  <div class="quiz-explain" id="q1-exp">The target (house price) is a continuous number — $342,000, $287,500, etc. When the output is a number, it's always Regression. If the output were "Luxury / Mid-range / Affordable", that would be Classification.</div>
+</div>
+
+<div class="quiz">
+  <div class="quiz-label">Question 2 of 8</div>
+  <h4>Your model achieves 99% accuracy on training data but only 61% on test data. What is this called and what does it mean?</h4>
+  <ul class="quiz-opts" id="q2">
+    <li onclick="answer(this,'q2',false,'q2-exp')">Underfitting — the model didn't learn enough</li>
+    <li onclick="answer(this,'q2',true,'q2-exp')">Overfitting — the model memorized training data ✓</li>
+    <li onclick="answer(this,'q2',false,'q2-exp')">Good performance — training accuracy should be higher</li>
+    <li onclick="answer(this,'q2',false,'q2-exp')">Class imbalance — the dataset is unbalanced</li>
+  </ul>
+  <div class="quiz-explain" id="q2-exp">A huge gap between training accuracy (99%) and test accuracy (61%) is the textbook definition of overfitting. The model memorized the training examples instead of learning the underlying pattern. Solution: use simpler model, more training data, or regularization techniques.</div>
+</div>
+
+<div class="quiz">
+  <div class="quiz-label">Question 3 of 8</div>
+  <h4>Why do we split data into 80% training and 20% test sets instead of training on all the data?</h4>
+  <ul class="quiz-opts" id="q3">
+    <li onclick="answer(this,'q3',false,'q3-exp')">Because 20% of the data is usually corrupted and must be excluded</li>
+    <li onclick="answer(this,'q3',false,'q3-exp')">To save computational time during training</li>
+    <li onclick="answer(this,'q3',true,'q3-exp')">To evaluate the model on data it has never seen — simulating real-world performance ✓</li>
+    <li onclick="answer(this,'q3',false,'q3-exp')">Because Dataiku requires exactly 80% to run ML</li>
+  </ul>
+  <div class="quiz-explain" id="q3-exp">The whole point of the test set is to simulate the real world — where the model faces data it's never seen before. If you trained on all data, you'd have no way to honestly measure how it would perform on new transactions arriving tomorrow.</div>
+</div>
+
+<div class="quiz">
+  <div class="quiz-label">Question 4 of 8</div>
+  <h4>You're building a customer segmentation model to group customers into "types" based on their behavior — but you have no predefined groups. What type of ML is this?</h4>
+  <ul class="quiz-opts" id="q4">
+    <li onclick="answer(this,'q4',false,'q4-exp')">Supervised Regression</li>
+    <li onclick="answer(this,'q4',false,'q4-exp')">Supervised Classification</li>
+    <li onclick="answer(this,'q4',true,'q4-exp')">Unsupervised Learning (Clustering) ✓</li>
+    <li onclick="answer(this,'q4',false,'q4-exp')">Feature Engineering</li>
+  </ul>
+  <div class="quiz-explain" id="q4-exp">Unsupervised learning has no target labels. You're asking the model to find structure in the data itself — grouping similar customers together without telling it what "groups" look like. K-Means clustering is the most common algorithm for this.</div>
+</div>
+
+<div class="quiz">
+  <div class="quiz-label">Question 5 of 8</div>
+  <h4>In Dataiku, you plot a pie chart of fraud vs authorized transactions and it shows 95% authorized, 5% fraud. But you only used the default sample (first 10,000 rows). Why might this chart be misleading?</h4>
+  <ul class="quiz-opts" id="q5">
+    <li onclick="answer(this,'q5',false,'q5-exp')">Pie charts can't show percentage distributions accurately</li>
+    <li onclick="answer(this,'q5',true,'q5-exp')">The first 10,000 rows may not be representative — if sorted by date, they could be from just one time period ✓</li>
+    <li onclick="answer(this,'q5',false,'q5-exp')">The chart is definitely accurate because 10,000 rows is a large sample</li>
+    <li onclick="answer(this,'q5',false,'q5-exp')">You need more colors on the chart</li>
+  </ul>
+  <div class="quiz-explain" id="q5-exp">If the data is sorted by date and fraud only became common in the later months, the first 10,000 rows might have very little fraud — making the chart look misleadingly "safe". Always use random sampling for charts to get a representative view of the full dataset.</div>
+</div>
+
+<div class="quiz">
+  <div class="quiz-label">Question 6 of 8</div>
+  <h4>What is the difference between a Feature and a Target in machine learning?</h4>
+  <ul class="quiz-opts" id="q6">
+    <li onclick="answer(this,'q6',false,'q6-exp')">Features are rows, targets are columns</li>
+    <li onclick="answer(this,'q6',true,'q6-exp')">Features (X) are input columns used to make predictions; Target (Y) is the output column being predicted ✓</li>
+    <li onclick="answer(this,'q6',false,'q6-exp')">Features are numerical columns; targets are text columns</li>
+    <li onclick="answer(this,'q6',false,'q6-exp')">There is no difference — they are the same thing</li>
+  </ul>
+  <div class="quiz-explain" id="q6-exp">Features (X) = inputs = everything the model uses to make its decision. Target (Y) = output = what the model predicts. In our project: Features = purchase_amount, risk, spending_type, states, etc. Target = authorised_flag (fraud or not).</div>
+</div>
+
+<div class="quiz">
+  <div class="quiz-label">Question 7 of 8</div>
+  <h4>Why did we create the "Risk" column (High/Medium/Low) in Day 1's Prepare recipe? Couldn't the model just use the raw purchase_amount and signature_provided columns directly?</h4>
+  <ul class="quiz-opts" id="q7">
+    <li onclick="answer(this,'q7',false,'q7-exp')">No, the model cannot handle numbers and binary columns simultaneously</li>
+    <li onclick="answer(this,'q7',false,'q7-exp')">It was required by Dataiku to run ML</li>
+    <li onclick="answer(this,'q7',true,'q7-exp')">The model could use raw columns, but the Risk column encodes domain knowledge — the combined signal of both factors — making it easier for the model to learn the fraud pattern ✓</li>
+    <li onclick="answer(this,'q7',false,'q7-exp')">Raw columns are deleted during training and only engineered features can be used</li>
+  </ul>
+  <div class="quiz-explain" id="q7-exp">This is the essence of feature engineering. Yes, the model could use raw columns. But by creating the Risk column, we encoded a human expert's insight: "high amount + no signature = high risk of fraud." This gives the model a shortcut — instead of discovering this combination itself (which needs lots of data), we hand it to the model pre-computed. Good feature engineering accelerates learning.</div>
+</div>
+
+<div class="quiz">
+  <div class="quiz-label">Question 8 of 8</div>
+  <h4>A colleague says: "Our fraud model has 98% accuracy, it's perfect!" You look closer and find that only 2% of all transactions are fraudulent. What is wrong with this reasoning?</h4>
+  <ul class="quiz-opts" id="q8">
+    <li onclick="answer(this,'q8',false,'q8-exp')">Nothing — 98% accuracy is always excellent</li>
+    <li onclick="answer(this,'q8',true,'q8-exp')">A model that predicts "Not Fraud" for every single transaction would also get 98% accuracy — this is class imbalance ✓</li>
+    <li onclick="answer(this,'q8',false,'q8-exp')">The training set was too small</li>
+    <li onclick="answer(this,'q8',false,'q8-exp')">The model needs more features to achieve 99% accuracy</li>
+  </ul>
+  <div class="quiz-explain" id="q8-exp">This is one of the most famous traps in ML evaluation. If 98% of data is "Not Fraud", a lazy model that ALWAYS predicts "Not Fraud" will be "98% accurate" — but completely useless! It never catches a single fraudster. For imbalanced datasets like fraud detection, Recall and AUC-ROC are much better metrics than accuracy.</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+  FINAL CHECKLIST
+══════════════════════════════════════════════════ -->
+<hr class="divider">
+<div class="sec">📋 Day 2 Mastery Checklist</div>
+<div class="card">
+  <ul class="checklist">
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I can explain what a chart shows and why it's useful to a non-technical colleague</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I understand why random sampling is better than default sampling for visualization</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I know how to publish charts to a Dataiku dashboard and share it with business users</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I can explain machine learning using a simple analogy without technical jargon</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I can distinguish between Supervised and Unsupervised learning and give an example of each</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I know when to use Regression vs Classification based on the target column type</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I can explain what a Feature and a Target are in ML</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I understand what Train-Test Split is and why it's necessary</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I can explain overfitting in plain English</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I know why accuracy alone can be misleading for imbalanced datasets like fraud detection</span></li>
+    <li><div class="chk" onclick="this.innerHTML=this.innerHTML?'':'✓'"></div><span>I understand the full ML workflow from data collection to prediction</span></li>
+  </ul>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+  GLOSSARY
+══════════════════════════════════════════════════ -->
+<div class="sec">📖 Complete Glossary — All Day 2 Terms</div>
+<div class="gloss">
+  <div class="gitem"><div class="gterm">Feature (X)</div><div class="gdef">An input column used by the model to make predictions. More meaningful features = better model.</div></div>
+  <div class="gitem"><div class="gterm">Target (Y)</div><div class="gdef">The output column the model tries to predict. Must exist (with values) in training data.</div></div>
+  <div class="gitem"><div class="gterm">Supervised Learning</div><div class="gdef">ML with labelled data — you have both inputs AND correct answers (labels) to learn from.</div></div>
+  <div class="gitem"><div class="gterm">Unsupervised Learning</div><div class="gdef">ML without labels — the model finds patterns/groups in data on its own. Used for clustering.</div></div>
+  <div class="gitem"><div class="gterm">Regression</div><div class="gdef">Predicts a continuous number (price, amount, temperature). Output can be any number.</div></div>
+  <div class="gitem"><div class="gterm">Classification</div><div class="gdef">Predicts a category (Fraud/Not Fraud, Yes/No, High/Medium/Low). Output is one of a fixed set of labels.</div></div>
+  <div class="gitem"><div class="gterm">Train-Test Split</div><div class="gdef">Dividing data into two parts: 80% for training the model, 20% for evaluating it on unseen data.</div></div>
+  <div class="gitem"><div class="gterm">Overfitting</div><div class="gdef">Model memorized training data — works great on training set, fails on new data. Large train/test gap.</div></div>
+  <div class="gitem"><div class="gterm">Underfitting</div><div class="gdef">Model too simple — performs poorly on both training and test data. Needs more complexity or features.</div></div>
+  <div class="gitem"><div class="gterm">EDA</div><div class="gdef">Exploratory Data Analysis — exploring, visualizing, and understanding data BEFORE building a model.</div></div>
+  <div class="gitem"><div class="gterm">Feature Engineering</div><div class="gdef">Creating new columns from existing ones to give the model better signals. The most impactful ML skill.</div></div>
+  <div class="gitem"><div class="gterm">Accuracy</div><div class="gdef">% of correct predictions out of all predictions. Can be misleading for imbalanced datasets.</div></div>
+  <div class="gitem"><div class="gterm">Precision</div><div class="gdef">Of all predicted frauds, what % were actually fraud? High precision = few false alarms.</div></div>
+  <div class="gitem"><div class="gterm">Recall</div><div class="gdef">Of all actual frauds, what % did the model catch? High recall = few missed frauds.</div></div>
+  <div class="gitem"><div class="gterm">AUC-ROC</div><div class="gdef">Overall model quality score (0.5=random, 1.0=perfect). Best metric for imbalanced datasets.</div></div>
+  <div class="gitem"><div class="gterm">Class Imbalance</div><div class="gdef">When one class (e.g., fraud) is much rarer than the other (not fraud). Makes accuracy misleading.</div></div>
+  <div class="gitem"><div class="gterm">AutoML</div><div class="gdef">Dataiku's automated ML — tries multiple algorithms, handles encoding, finds the best model for you.</div></div>
+  <div class="gitem"><div class="gterm">Dashboard</div><div class="gdef">A single page showing multiple charts/metrics together. Shared with business users for decision-making.</div></div>
+</div>
+
+<div style="text-align:center;color:var(--muted);font-size:12px;padding-top:48px;margin-top:40px;border-top:1px solid var(--border);">
+  Dataiku Hands-On Training · Q2 2025 · Day 2 · Complete Self-Study Documentation 📚
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function answer(el, qid, isCorrect, expId) {
+  const opts = document.getElementById(qid).querySelectorAll('li');
+  opts.forEach(o => o.onclick = null); // disable further clicks
+  el.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    opts.forEach(o => { if (o.textContent.includes('✓')) o.classList.add('correct'); });
+  }
+  document.getElementById(expId).classList.add('show');
+}
+</script>
+</body>
+</html>
